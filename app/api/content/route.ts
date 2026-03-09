@@ -3,8 +3,10 @@ import { NextResponse } from "next/server";
 import { siteContent as defaultContent } from "@/app/lib/content";
 
 function getClient() {
+  // Use https:// instead of libsql:// for Vercel serverless compatibility
+  const url = (process.env.TURSO_DATABASE_URL || "").replace("libsql://", "https://");
   return createClient({
-    url: process.env.TURSO_DATABASE_URL!,
+    url,
     authToken: process.env.TURSO_AUTH_TOKEN!,
   });
 }
