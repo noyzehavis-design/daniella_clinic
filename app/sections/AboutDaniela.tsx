@@ -65,7 +65,11 @@ export default function AboutDaniela() {
               {name}
             </h2>
             <p className="text-primary font-semibold mb-4">{title}</p>
-            <p className="text-textSecondary leading-relaxed mb-8">{bio}</p>
+            {bio.includes("<") ? (
+              <div className="text-textSecondary leading-relaxed mb-8" dangerouslySetInnerHTML={{ __html: bio }} />
+            ) : (
+              <p className="text-textSecondary leading-relaxed mb-8">{bio}</p>
+            )}
 
             {/* Strengths 2×2 grid */}
             <div className="grid grid-cols-2 gap-4 mb-8">
@@ -84,7 +88,7 @@ export default function AboutDaniela() {
               })}
             </div>
 
-            <GlowButton href="#footer-form">{ctaText}</GlowButton>
+            <GlowButton href="#inline-form">{ctaText}</GlowButton>
           </motion.div>
         </div>
       </div>

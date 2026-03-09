@@ -27,12 +27,22 @@ export default function ClinicSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { content } = useContent();
-  const { heading, team, tech, ctaText } = content.clinic_section;
+  const { heading, subheading, paragraph, team, tech, ctaText } = content.clinic_section;
 
   return (
     <section ref={ref} className="bg-lightBg py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4">
-        <SectionHeading heading={heading} eyebrow="הצוות שלנו" className="mb-14" />
+        <SectionHeading heading={heading} eyebrow="הצוות שלנו" />
+        {subheading && (
+          <p className="text-center text-dark/60 text-lg -mt-8 mb-6">{subheading}</p>
+        )}
+        {paragraph && (
+          paragraph.includes("<") ? (
+            <div className="text-center text-dark/70 text-base max-w-2xl mx-auto mb-14 leading-relaxed" dangerouslySetInnerHTML={{ __html: paragraph }} />
+          ) : (
+            <p className="text-center text-dark/70 text-base max-w-2xl mx-auto mb-14 leading-relaxed">{paragraph}</p>
+          )
+        )}
 
         {/* Team Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -103,7 +113,7 @@ export default function ClinicSection() {
         >
           <p className="text-white font-bold text-xl mb-6">{ctaText}</p>
           <GlowButton
-            href="#footer-form"
+            href="#inline-form"
             className="!bg-white !text-primary !from-white !to-white shadow-[0_4px_24px_rgba(255,255,255,0.4)]"
           >
             {ctaText}

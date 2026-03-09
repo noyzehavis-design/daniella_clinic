@@ -82,9 +82,13 @@ export default function TestimonialsSlider() {
                   </div>
 
                   {/* Quote */}
-                  <p className="text-textPrimary italic text-sm leading-relaxed flex-1">
-                    {item.text}
-                  </p>
+                  {item.text.includes("<") ? (
+                    <div className="text-textPrimary italic text-sm leading-relaxed flex-1" dangerouslySetInnerHTML={{ __html: item.text }} />
+                  ) : (
+                    <p className="text-textPrimary italic text-sm leading-relaxed flex-1">
+                      {item.text}
+                    </p>
+                  )}
 
                   {/* Name + source */}
                   <div className="flex items-center justify-between mt-2">
