@@ -27,7 +27,11 @@ async function tursoQuery(sql: string, args: unknown[] = []) {
   }
 
   const json = await res.json();
-  return json.results[0];
+  const result = json.results[0];
+  if (result?.type === "error") {
+    throw new Error(`Turso SQL error: ${JSON.stringify(result.error)}`);
+  }
+  return result;
 }
 
 export async function GET() {
@@ -77,7 +81,12 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ ok: true });
+    // Read back to confirm
+    const verify = await tursoQuery("SELECT data FROM site_content WHERE id = 1");
+    const saved = verify?.response?.result?.rows?.[0]?.[0]?.value;
+    const savedHeading = saved ? JSON.parse(saved)?.hero?.heading : null;
+
+    return NextResponse.json({ ok: true, savedHeading });
   } catch (e) {
     return NextResponse.json({ ok: false, error: String(e) }, { status: 500 });
   }
