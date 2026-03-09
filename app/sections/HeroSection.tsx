@@ -33,24 +33,55 @@ const fadeUp = (delay: number) => ({
   transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] as const, delay },
 });
 
+function getYouTubeId(url: string): string | null {
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  return match ? match[1] : null;
+}
+
 export default function HeroSection() {
   const { content } = useContent();
-  const { heading, subheading } = content.hero;
+  const { heading, subheading, videoUrl } = content.hero;
   const { phone } = content.clinic;
   const phoneClean = phone.replace(/-/g, "");
 
   return (
     <section className="relative h-screen overflow-hidden bg-dark flex flex-col items-end md:items-center justify-center">
       {/* Video background */}
-      <video
-        src="/videos/hero.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: 0 }}
-      />
+      {videoUrl ? (
+        (() => {
+          const ytId = getYouTubeId(videoUrl);
+          return ytId ? (
+            <div className="absolute inset-0 overflow-hidden" style={{ zIndex: 0 }}>
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=1&loop=1&controls=0&playlist=${ytId}&playsinline=1&modestbranding=1&rel=0`}
+                allow="autoplay; encrypted-media"
+                className="absolute"
+                style={{
+                  top: "50%", left: "50%",
+                  width: "177.8vh", height: "100vh",
+                  minWidth: "100%", minHeight: "56.25vw",
+                  transform: "translate(-50%, -50%)",
+                  pointerEvents: "none",
+                  border: "none",
+                }}
+                title="hero background"
+              />
+            </div>
+          ) : null;
+        })()
+      ) : (
+        <video
+          src="/videos/hero.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ zIndex: 0 }}
+        />
+      )}
 
       {/* Dark overlay */}
       <div

@@ -1,122 +1,119 @@
 "use client";
-import { useRef } from "react";
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
 import { FaFacebook, FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
+import { FaTiktok } from "react-icons/fa6";
 import { useContent } from "@/app/lib/ContentContext";
+
+const SOCIAL_ICON_CLASS =
+  "w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/70 hover:text-[#4ABFBF] hover:border-[#4ABFBF] transition-colors text-base";
 
 export default function Footer() {
   const { content } = useContent();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { clinic, footer } = content;
+
+  const services = ["יישור שיניים", "רופאת ילדים", "שיננית", "iTero"];
+
   return (
-    <footer dir="rtl" style={{ backgroundColor: "#3D3D3D" }} className="text-white">
-      <motion.div
-        ref={ref}
-        className="max-w-7xl mx-auto px-4 py-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6 }}
-      >
+    <footer dir="rtl" style={{ backgroundColor: "#0F1923" }} className="text-white">
+      {/* ── Main row ── */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
 
-        {/* Logo */}
-        <div className="flex justify-center mb-10">
-          <Image
-            src="/BLACK_LOGO.jpg"
-            alt={content.clinic.name}
-            width={160}
-            height={60}
-            style={{ filter: "invert(1)" }}
-            className="object-contain"
-          />
-        </div>
-
-        {/* 3-column grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10 text-center md:text-right">
-
-          {/* Contact */}
-          <div>
-            <h3 className="font-bold text-lg mb-3 text-[#4ABFBF]">צור קשר</h3>
-            <p className="text-white/80">{content.clinic.address}</p>
-            <p dir="ltr" className="text-right text-white/80">{content.clinic.phone}</p>
-          </div>
-
-          {/* Hours */}
-          <div>
-            <h3 className="font-bold text-lg mb-3 text-[#4ABFBF]">שעות פתיחה</h3>
-            <table className="mx-auto md:mx-0 text-sm">
-              <tbody>
-                {content.clinic.hours.map(({ day, hours }) => (
-                  <tr key={day}>
-                    <td className="pl-4 text-white/70 text-right">{day}</td>
-                    <td className="text-white/90">{hours}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Social */}
-          <div>
-            <h3 className="font-bold text-lg mb-3 text-[#4ABFBF]">עקבו אחרינו</h3>
-            <div className="flex gap-4 justify-center md:justify-start">
-              <motion.a
-                href={content.clinic.social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-2xl text-white/70 hover:text-[#4ABFBF] transition-colors"
-                aria-label="Facebook"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ duration: 0.2 }}
-              >
-                <FaFacebook />
-              </motion.a>
-              <motion.a
-                href={content.clinic.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-2xl text-white/70 hover:text-[#4ABFBF] transition-colors"
-                aria-label="Instagram"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ duration: 0.2 }}
-              >
-                <FaInstagram />
-              </motion.a>
-              <motion.a
-                href={content.clinic.social.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-2xl text-white/70 hover:text-[#4ABFBF] transition-colors"
-                aria-label="YouTube"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ duration: 0.2 }}
-              >
-                <FaYoutube />
-              </motion.a>
-              <motion.a
-                href={`https://wa.me/${content.clinic.social.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-2xl text-white/70 hover:text-[#4ABFBF] transition-colors"
-                aria-label="WhatsApp"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ duration: 0.2 }}
-              >
-                <FaWhatsapp />
-              </motion.a>
+          {/* RIGHT — Logo + name + tagline */}
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <Image
+              src="/clinic-logo.png"
+              alt={clinic.name}
+              width={52}
+              height={52}
+              className="object-contain rounded-full"
+            />
+            <div>
+              <p className="font-bold text-white text-base leading-tight">{clinic.name}</p>
+              <p className="text-white/50 text-xs mt-0.5">{clinic.tagline}</p>
             </div>
           </div>
-        </div>
 
-        {/* Divider + copyright */}
-        <div className="border-t border-white/10 pt-6 text-center text-white/50 text-sm">
-          {content.footer.copyright}
+          {/* CENTER — Contact + services */}
+          <div className="flex flex-col gap-1.5 text-sm text-center">
+            <a
+              href={`tel:${clinic.phone.replace(/-/g, "")}`}
+              dir="ltr"
+              className="text-white/80 hover:text-[#4ABFBF] transition-colors font-medium"
+            >
+              {clinic.phone}
+            </a>
+            {clinic.email && (
+              <a
+                href={`mailto:${clinic.email}`}
+                className="text-white/60 hover:text-[#4ABFBF] transition-colors"
+              >
+                {clinic.email}
+              </a>
+            )}
+            <div className="flex items-center justify-center gap-2 text-white/40 text-xs mt-1 flex-wrap">
+              {services.map((s, i) => (
+                <span key={s} className="flex items-center gap-2">
+                  {i > 0 && <span>•</span>}
+                  <span>{s}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* LEFT — Social icons */}
+          <div className="flex items-center gap-3">
+            <a
+              href="https://www.tiktok.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="TikTok"
+              className={SOCIAL_ICON_CLASS}
+            >
+              <FaTiktok />
+            </a>
+            <a
+              href={clinic.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className={SOCIAL_ICON_CLASS}
+            >
+              <FaInstagram />
+            </a>
+            <a
+              href={clinic.social.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className={SOCIAL_ICON_CLASS}
+            >
+              <FaFacebook />
+            </a>
+            <a
+              href={`https://wa.me/${clinic.social.whatsapp}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className={SOCIAL_ICON_CLASS}
+            >
+              <FaWhatsapp />
+            </a>
+          </div>
         </div>
-      </motion.div>
+      </div>
+
+      {/* ── Bottom bar ── */}
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+        <div className="max-w-7xl mx-auto px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/40">
+          <span>{footer.copyright}</span>
+          <div className="flex items-center gap-4">
+            <a href="#" className="hover:text-white/70 transition-colors">מדיניות פרטיות</a>
+            <span>|</span>
+            <a href="#" className="hover:text-white/70 transition-colors">הצהרת נגישות</a>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 }

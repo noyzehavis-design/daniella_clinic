@@ -153,12 +153,13 @@ export default function AdminPage() {
   const { content, setContent } = useContent();
   const [draft, setDraft] = useState<SiteContent>(content);
   const [toast, setToast] = useState("");
+  const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem("adminAuth") === "true") setAuthenticated(true);
   }, []);
 
-  useEffect(() => { setDraft(content); }, [content]);
+  useEffect(() => { setDraft(content); setIsDirty(false); }, [content]);
 
   const showToast = () => {
     setToast("נשמר בהצלחה! ✓");
@@ -167,6 +168,7 @@ export default function AdminPage() {
 
   const save = async () => {
     await setContent(draft);
+    setIsDirty(false);
     showToast();
   };
 
@@ -182,6 +184,7 @@ export default function AdminPage() {
 
   function updateDraft<K extends keyof SiteContent>(key: K, val: SiteContent[K]) {
     setDraft(prev => ({ ...prev, [key]: val }));
+    setIsDirty(true);
   }
 
   // ─── Login Screen ─────────────────────────────────────────────────────────
@@ -196,7 +199,7 @@ export default function AdminPage() {
           className="rounded-2xl p-10 w-full max-w-sm flex flex-col items-center gap-6 shadow-2xl"
           style={{ backgroundColor: "#141E28", border: "1px solid rgba(74,191,191,0.2)" }}
         >
-          <Image src="/BLACK_LOGO.jpg" alt="לוגו" width={140} height={52} className="object-contain" />
+          <Image src="/clinic-logo.png" alt="לוגו" width={140} height={52} className="object-contain" />
           <h1 className="text-white text-2xl font-bold">כניסה לניהול</h1>
           <input
             type="password"
@@ -243,7 +246,7 @@ export default function AdminPage() {
         style={{ backgroundColor: "#141E28", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}
       >
         <div className="p-5 border-b border-slate-700/60 flex flex-col items-center gap-3">
-          <Image src="/BLACK_LOGO.jpg" alt="לוגו" width={110} height={42} className="object-contain" />
+          <Image src="/clinic-logo.png" alt="לוגו" width={110} height={42} className="object-contain" />
           <div className="w-full flex items-center justify-between">
             <span className="text-xs text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">מנהל</span>
             <button
@@ -289,6 +292,14 @@ export default function AdminPage() {
             onChange={v => updateDraft("hero", { ...draft.hero, backgroundImage: v })}
             hint="רוחב: 1920px · יחס 16:9 · עד 3MB · JPG/WebP"
           />
+          <Field
+            label="YouTube URL לרקע הוידאו (אופציונלי)"
+            value={draft.hero.videoUrl ?? ""}
+            onChange={v => updateDraft("hero", { ...draft.hero, videoUrl: v })}
+          />
+          <p className="text-xs text-slate-500 -mt-2 mb-3">
+            הדבק קישור YouTube — לדוגמה: https://www.youtube.com/watch?v=XXXXX
+          </p>
           <SaveButton onClick={save} />
         </div>
 
@@ -754,6 +765,19 @@ export default function AdminPage() {
         </div>
 
       </main>
+
+      {/* Dirty banner */}
+      {isDirty && (
+        <div className="fixed bottom-0 inset-x-0 z-40 flex items-center justify-between bg-amber-500/95 backdrop-blur-sm text-white text-sm font-semibold px-6 py-3 shadow-xl">
+          <span>יש שינויים שלא נשמרו</span>
+          <button
+            onClick={save}
+            className="px-4 py-1.5 bg-white text-amber-600 rounded-lg text-sm font-bold hover:bg-amber-50 transition-colors"
+          >
+            שמור עכשיו
+          </button>
+        </div>
+      )}
 
       {/* Toast */}
       {toast && (

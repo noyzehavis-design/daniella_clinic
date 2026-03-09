@@ -80,3 +80,17 @@ body {
     text-wrap: balance;
   }
 }
+
+@media (max-width: 768px) {
+  section {
+    scroll-margin-top: 60px;
+  }
+
+  footer, #footer-form {
+    padding-bottom: calc(52px + env(safe-area-inset-bottom));
+  }
+
+  main > section + section {
+    border-top: none;
+  }
+}

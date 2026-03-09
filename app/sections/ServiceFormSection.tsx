@@ -20,7 +20,7 @@ type FormData = z.infer<typeof formSchema>;
 
 const inputClass = (hasError?: boolean) =>
   `w-full border-[1.5px] rounded-xl px-4 py-[14px] outline-none transition-all duration-200
-   bg-lightBg text-textDark placeholder:text-textSecondary
+   bg-lightBg text-base text-textDark placeholder:text-textSecondary
    ${
      hasError
        ? "border-red-400"

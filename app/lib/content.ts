@@ -23,6 +23,7 @@ export type SiteContent = {
     subheading: string;
     ctaText: string;
     backgroundImage: string;
+    videoUrl?: string;
   };
   trustBar: {
     items: { icon: string; number?: string; text?: string; label: string }[];
@@ -121,6 +122,7 @@ export const siteContent: SiteContent = {
       "יישור שיניים שקוף עם טכנולוגיה מתקדמת – לתוצאות שתאהבי",
     ctaText: "לתיאום ייעוץ חינם ←",
     backgroundImage: "/images/hero-bg.jpg",
+    videoUrl: "",
   },
 
   trustBar: {
