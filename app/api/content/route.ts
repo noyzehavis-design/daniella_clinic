@@ -66,12 +66,7 @@ export async function POST(request: Request) {
       });
     }
 
-    // Read back to confirm
-    const verify = await client.execute("SELECT data FROM site_content WHERE id = 1");
-    const saved = verify.rows[0]?.data as string;
-    const savedHeading = JSON.parse(saved)?.hero?.heading;
-
-    return NextResponse.json({ ok: true, rowExisted: count > 0, savedHeading });
+    return NextResponse.json({ ok: true });
   } catch (e) {
     return NextResponse.json({ ok: false, error: String(e) }, { status: 500 });
   }
