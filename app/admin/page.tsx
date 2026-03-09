@@ -194,12 +194,16 @@ function SubLabel({ children }: { children: React.ReactNode }) {
   return <p className="text-xs font-medium text-slate-400 mt-3 mb-2">{children}</p>;
 }
 
-function SaveButton({ onClick }: { onClick: () => void }) {
+function SaveButton({ onClick, disabled }: { onClick: () => void; disabled?: boolean }) {
   return (
     <button
       onClick={onClick}
-      className="mt-5 px-5 py-2 bg-teal-500 hover:bg-teal-400 text-white text-sm font-semibold rounded-lg shadow-md shadow-teal-500/20 transition-all"
+      disabled={disabled}
+      className="mt-5 px-5 py-2 bg-teal-500 hover:bg-teal-400 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg shadow-md shadow-teal-500/20 transition-all flex items-center gap-2"
     >
+      {disabled && (
+        <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+      )}
       שמור שינויים
     </button>
   );
@@ -213,8 +217,9 @@ export default function AdminPage() {
   const [authError, setAuthError] = useState(false);
   const { content, setContent } = useContent();
   const [draft, setDraft] = useState<SiteContent>(content);
-  const [toast, setToast] = useState("");
+  const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
   const [isDirty, setIsDirty] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [activeSection, setActiveSection] = useState("section-hero");
 
   // Image crop state
@@ -234,15 +239,22 @@ export default function AdminPage() {
     setIsDirty(false);
   }, [content]);
 
-  const showToast = () => {
-    setToast("נשמר בהצלחה! ✓");
-    setTimeout(() => setToast(""), 2500);
+  const showToast = (msg: string, type: "success" | "error" = "success") => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
   };
 
   const save = async () => {
-    await setContent(draft);
-    setIsDirty(false);
-    showToast();
+    setIsSaving(true);
+    try {
+      await setContent(draft);
+      setIsDirty(false);
+      showToast("נשמר בהצלחה! ✓");
+    } catch {
+      showToast("שגיאה בשמירה — נסה שוב", "error");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleLogin = () => {
@@ -399,7 +411,7 @@ export default function AdminPage() {
             <p className="text-xs text-slate-500 -mt-2 mb-3">
               הדבק קישור YouTube — לדוגמה: https://www.youtube.com/watch?v=XXXXX
             </p>
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -443,7 +455,7 @@ export default function AdminPage() {
                 updateDraft("trustBar", { items });
               }}
             />
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -486,7 +498,7 @@ export default function AdminPage() {
               hint="יחס 4:3 מומלץ · עד 2MB · JPG/PNG/WebP"
               onCrop={openCrop}
             />
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -537,7 +549,7 @@ export default function AdminPage() {
                 updateDraft("about", { ...draft.about, strengths });
               }}
             />
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -587,7 +599,7 @@ export default function AdminPage() {
                 updateDraft("patients", { ...draft.patients, images });
               }}
             />
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -677,7 +689,7 @@ export default function AdminPage() {
                 updateDraft("clinic_section", { ...draft.clinic_section, tech });
               }}
             />
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -725,7 +737,7 @@ export default function AdminPage() {
                 updateDraft("testimonials", { ...draft.testimonials, items });
               }}
             />
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -797,7 +809,7 @@ export default function AdminPage() {
                 updateDraft("staff_split", { ...draft.staff_split, right: { ...draft.staff_split.right, bullets } });
               }}
             />
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -839,7 +851,7 @@ export default function AdminPage() {
                 updateDraft("videos", { ...draft.videos, items });
               }}
             />
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -874,7 +886,7 @@ export default function AdminPage() {
                 updateDraft("forms", { ...draft.forms, serviceOptions });
               }}
             />
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -886,7 +898,7 @@ export default function AdminPage() {
             <p className="text-xs text-slate-500 mt-1">
               שאר הגדרות הטופס נמצאות ב&quot;טופס מרכז&quot;
             </p>
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -937,7 +949,7 @@ export default function AdminPage() {
             <Field label="Instagram" value={draft.clinic.social.instagram} onChange={v => updateDraft("clinic", { ...draft.clinic, social: { ...draft.clinic.social, instagram: v } })} />
             <Field label="YouTube" value={draft.clinic.social.youtube} onChange={v => updateDraft("clinic", { ...draft.clinic, social: { ...draft.clinic.social, youtube: v } })} />
             <Field label="WhatsApp (מספר בלבד)" value={draft.clinic.social.whatsapp} onChange={v => updateDraft("clinic", { ...draft.clinic, social: { ...draft.clinic.social, whatsapp: v } })} />
-            <SaveButton onClick={save} />
+            <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
 
@@ -981,8 +993,12 @@ export default function AdminPage() {
           <span>יש שינויים שלא נשמרו</span>
           <button
             onClick={save}
-            className="px-4 py-1.5 bg-white text-amber-600 rounded-lg text-sm font-bold hover:bg-amber-50 transition-colors"
+            disabled={isSaving}
+            className="px-4 py-1.5 bg-white text-amber-600 rounded-lg text-sm font-bold hover:bg-amber-50 disabled:opacity-60 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
           >
+            {isSaving && (
+              <span className="w-3.5 h-3.5 border-2 border-amber-400/40 border-t-amber-600 rounded-full animate-spin" />
+            )}
             שמור עכשיו
           </button>
         </div>
@@ -990,8 +1006,8 @@ export default function AdminPage() {
 
       {/* Toast */}
       {toast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-teal-600 text-white font-semibold px-5 py-2.5 rounded-lg shadow-xl shadow-teal-900/40 z-50 text-sm flex items-center gap-2">
-          {toast}
+        <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 text-white font-semibold px-5 py-2.5 rounded-lg shadow-xl z-50 text-sm flex items-center gap-2 ${toast.type === "error" ? "bg-red-600 shadow-red-900/40" : "bg-teal-600 shadow-teal-900/40"}`}>
+          {toast.msg}
         </div>
       )}
     </div>

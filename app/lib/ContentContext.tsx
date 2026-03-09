@@ -27,14 +27,18 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       .then((data) => {
         const merged = { ...defaultContent, ...data };
         setContentState(merged);
-        localStorage.setItem("siteContent", JSON.stringify(merged));
+        try { localStorage.setItem("siteContent", JSON.stringify(merged)); } catch {}
       })
       .catch(() => {});
   }, []);
 
   const setContent = async (c: SiteContent) => {
     setContentState(c);
-    localStorage.setItem("siteContent", JSON.stringify(c));
+    try {
+      localStorage.setItem("siteContent", JSON.stringify(c));
+    } catch {
+      // localStorage full (QuotaExceededError) — still proceed with API save
+    }
     const res = await fetch("/api/content", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -42,7 +46,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     });
     const json = await res.json();
     if (!json.ok) {
-      console.error("Save failed:", json);
+      throw new Error(json.error ?? "שמירה נכשלה");
     }
   };
 
