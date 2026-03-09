@@ -51,6 +51,7 @@ export type SiteContent = {
   clinic_section: {
     heading: string;
     subheading: string;
+    paragraph: string;
     team: { name: string; role: string; image: string }[];
     tech: { icon: string; label: string; description: string }[];
     ctaText: string;
@@ -85,6 +86,10 @@ export type SiteContent = {
     successMessage: string;
     inlineTitle: string;
     footerTitle: string;
+    contactEmail: string;
+    fieldName: string;
+    fieldPhone: string;
+    fieldService: string;
   };
   footer: {
     copyright: string;
@@ -178,6 +183,7 @@ export const siteContent: SiteContent = {
   clinic_section: {
     heading: "המרפאה שלנו",
     subheading: "צוות מקצועי, טכנולוגיה מתקדמת, אווירה חמה",
+    paragraph: "המרפאה שלנו מציעה סביבה חמה ומקצועית עם הטכנולוגיה המתקדמת ביותר בתחום האורתודונטיה. אנחנו מאמינים שטיפול אורתודונטי הוא השקעה לכל החיים.",
     team: [
       {
         name: 'ד"ר דניאלה בלטר-אבן',
@@ -287,6 +293,10 @@ export const siteContent: SiteContent = {
     successMessage: "תודה! ניצור איתך קשר בהקדם 😊",
     inlineTitle: "קבלי ייעוץ חינם עכשיו",
     footerTitle: "מוכנה להתחיל? נשמח לקבוע לך ייעוץ חינם",
+    contactEmail: "",
+    fieldName: "שם מלא",
+    fieldPhone: "טלפון",
+    fieldService: "סוג שירות",
   },
 
   footer: {

@@ -100,8 +100,8 @@ export default function HeroSection() {
           inset: 0,
           zIndex: 2,
           background: `
-            radial-gradient(ellipse at 20% 50%, rgba(74,191,191,0.08) 0%, transparent 55%),
-            radial-gradient(ellipse at 80% 20%, rgba(45,158,158,0.05) 0%, transparent 50%)
+            radial-gradient(ellipse at 20% 50%, rgba(74,191,191,0.25) 0%, transparent 60%),
+            radial-gradient(ellipse at 80% 20%, rgba(45,158,158,0.18) 0%, transparent 55%)
           `,
           pointerEvents: "none",
         }}
@@ -145,7 +145,7 @@ export default function HeroSection() {
           {...fadeUp(0.7)}
           className="flex flex-col sm:flex-row gap-4 items-center justify-center"
         >
-          <GlowButton href="#footer-form" size="lg">
+          <GlowButton href="#inline-form" size="lg">
             {content.hero.ctaText}
           </GlowButton>
           <a

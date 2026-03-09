@@ -1,12 +1,11 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import "swiper/css/pagination";
 import { useContent } from "@/app/lib/ContentContext";
 
 export default function PatientsSlider() {
@@ -14,6 +13,8 @@ export default function PatientsSlider() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { content } = useContent();
   const { heading, subheading, images } = content.patients;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [total, setTotal] = useState(0);
 
   return (
     <section className="bg-white py-16 md:py-24 overflow-hidden">
@@ -35,27 +36,34 @@ export default function PatientsSlider() {
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
           style={{
             "--swiper-navigation-color": "#4ABFBF",
-            "--swiper-pagination-color": "#4ABFBF",
           } as React.CSSProperties}
         >
           <Swiper
             dir="rtl"
-            modules={[Navigation, Pagination, Autoplay]}
+            modules={[Navigation, Autoplay]}
             navigation
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 3500, disableOnInteraction: false }}
+            autoplay={{ delay: 0, disableOnInteraction: false }}
+            speed={4000}
             loop
+            allowTouchMove
             spaceBetween={24}
             breakpoints={{
               0:    { slidesPerView: 1 },
               640:  { slidesPerView: 2 },
               1024: { slidesPerView: 3 },
             }}
-            className="pb-12"
+            onSwiper={(s) => setTotal(s.slides.length)}
+            onSlideChange={(s) => setActiveIndex(s.realIndex)}
           >
             {images.map((img, i) => (
               <SwiperSlide key={i}>
-                <div className="rounded-2xl overflow-hidden shadow-md">
+                <div
+                  className="rounded-2xl overflow-hidden"
+                  style={{
+                    border: "1.5px solid rgba(74,191,191,0.35)",
+                    boxShadow: "0 8px 30px rgba(74,191,191,0.12), 0 2px 8px rgba(0,0,0,0.06)",
+                  }}
+                >
                   <div className="relative w-full aspect-[4/3]">
                     <Image
                       src={img.src}
@@ -74,6 +82,22 @@ export default function PatientsSlider() {
               </SwiperSlide>
             ))}
           </Swiper>
+
+          {/* Animated pill progress bar */}
+          <div className="mt-6 flex items-center gap-2 justify-center">
+            {Array.from({ length: total }).map((_, i) => (
+              <motion.div
+                key={i}
+                animate={{ width: i === activeIndex ? 32 : 8, opacity: i === activeIndex ? 1 : 0.3 }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                style={{
+                  height: 4,
+                  borderRadius: 99,
+                  background: "#4ABFBF",
+                }}
+              />
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

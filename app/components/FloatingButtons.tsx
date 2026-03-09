@@ -116,7 +116,7 @@ export default function FloatingButtons() {
             <button
               onClick={() =>
                 document
-                  .getElementById("footer-form")
+                  .getElementById("inline-form")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
               className="w-full h-full font-bold text-white text-lg"

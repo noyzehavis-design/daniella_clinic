@@ -13,7 +13,7 @@ const navLinks = [
   { label: "תוצאות", href: "#results" },
   { label: "המרפאה", href: "#clinic" },
   { label: "ביקורות", href: "#testimonials" },
-  { label: "צור קשר", href: "#footer-form" },
+  { label: "צור קשר", href: "#inline-form" },
 ];
 
 export default function Navbar() {

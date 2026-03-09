@@ -103,7 +103,7 @@ function StaffPanel({ data }: { data: StaffMember }) {
                 ))}
               </motion.ul>
               <GlowButton
-                href="#footer-form"
+                href="#inline-form"
                 size="sm"
                 onClick={(e?: React.MouseEvent) => e?.stopPropagation()}
               >
