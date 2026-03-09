@@ -5,11 +5,11 @@ import Image from "next/image";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { FaPhone } from "react-icons/fa";
 import GlowButton from "@/app/components/ui/GlowButton";
-import { siteContent } from "@/app/lib/content";
-
-const { phone } = siteContent.clinic;
+import { useContent } from "@/app/lib/ContentContext";
 
 export default function Navbar() {
+  const { content } = useContent();
+  const { phone } = content.clinic;
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -45,15 +45,17 @@ export default function Navbar() {
         className="max-w-7xl mx-auto flex items-center justify-between h-[72px]"
         style={{ padding: "0 max(24px, 5vw)" }}
       >
-        {/* Phone button — right side in RTL */}
-        <div className="hidden md:flex items-center">
-          <GlowButton href={`tel:${phone.replace(/-/g, "")}`} size="sm">
-            <span className="flex items-center gap-2" dir="ltr">
-              <FaPhone className="text-xs" />
-              <span>{phone}</span>
-            </span>
-          </GlowButton>
-        </div>
+        {/* Logo — right side in RTL */}
+        <a href="/" aria-label="לדף הבית">
+          <Image
+            src="/clinic-logo.jpg"
+            alt="לוגו קליניקת דניאלה"
+            width={120}
+            height={48}
+            className="h-10 md:h-12 w-auto object-contain rounded-lg bg-white/90 px-2 py-1"
+            priority
+          />
+        </a>
 
         {/* Mobile: hamburger */}
         <button
@@ -64,21 +66,15 @@ export default function Navbar() {
           <span className="text-2xl text-white">{menuOpen ? "✕" : "☰"}</span>
         </button>
 
-        {/* Logo */}
-        <a href="/" aria-label="לדף הבית">
-          <Image
-            src="/BLACK_LOGO.jpg"
-            alt="לוגו קליניקת דניאלה"
-            width={120}
-            height={48}
-            className="h-10 md:h-12 w-auto object-contain"
-            style={{
-              filter:
-                !scrolled && !menuOpen ? "brightness(0) invert(1)" : "none",
-            }}
-            priority
-          />
-        </a>
+        {/* Phone button — left side in RTL */}
+        <div className="hidden md:flex items-center">
+          <GlowButton href={`tel:${phone.replace(/-/g, "")}`} size="sm">
+            <span className="flex items-center gap-2" dir="ltr">
+              <FaPhone className="text-xs" />
+              <span>{phone}</span>
+            </span>
+          </GlowButton>
+        </div>
       </div>
 
       {/* Mobile dropdown */}

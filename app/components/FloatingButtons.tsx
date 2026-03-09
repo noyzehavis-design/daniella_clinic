@@ -2,10 +2,11 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaWhatsapp, FaPhone } from "react-icons/fa";
-import { siteContent } from "@/app/lib/content";
+import { useContent } from "@/app/lib/ContentContext";
 
 export default function FloatingButtons() {
-  const { phone, social } = siteContent.clinic;
+  const { content } = useContent();
+  const { phone, social } = content.clinic;
   const phoneClean = phone.replace(/-/g, "");
   const [visible, setVisible] = useState(false);
 
