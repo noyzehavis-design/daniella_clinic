@@ -81,12 +81,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Read back to confirm
-    const verify = await tursoQuery("SELECT data FROM site_content WHERE id = 1");
-    const saved = verify?.response?.result?.rows?.[0]?.[0]?.value;
-    const savedHeading = saved ? JSON.parse(saved)?.hero?.heading : null;
-
-    return NextResponse.json({ ok: true, savedHeading });
+    return NextResponse.json({ ok: true });
   } catch (e) {
     return NextResponse.json({ ok: false, error: String(e) }, { status: 500 });
   }
