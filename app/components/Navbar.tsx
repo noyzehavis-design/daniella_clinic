@@ -7,6 +7,15 @@ import { FaPhone } from "react-icons/fa";
 import GlowButton from "@/app/components/ui/GlowButton";
 import { useContent } from "@/app/lib/ContentContext";
 
+const navLinks = [
+  { label: "שירותים", href: "#services" },
+  { label: "אודות", href: "#about" },
+  { label: "תוצאות", href: "#results" },
+  { label: "המרפאה", href: "#clinic" },
+  { label: "ביקורות", href: "#testimonials" },
+  { label: "צור קשר", href: "#footer-form" },
+];
+
 export default function Navbar() {
   const { content } = useContent();
   const { phone } = content.clinic;
@@ -32,7 +41,7 @@ export default function Navbar() {
               backgroundColor: "rgba(15,25,35,0.85)",
               backdropFilter: "blur(20px)",
             }
-          : { backgroundColor: "transparent" }
+          : { backgroundColor: "rgba(10,18,26,0.2)", backdropFilter: "blur(4px)" }
       }
     >
       {/* Scroll progress bar */}
@@ -48,14 +57,27 @@ export default function Navbar() {
         {/* Logo — right side in RTL */}
         <a href="/" aria-label="לדף הבית">
           <Image
-            src="/clinic-logo.jpg"
+            src="/clinic-logo.png"
             alt="לוגו קליניקת דניאלה"
             width={120}
             height={48}
-            className="h-10 md:h-12 w-auto object-contain rounded-lg bg-white/90 px-2 py-1"
+            className="h-10 md:h-12 w-auto object-contain"
             priority
           />
         </a>
+
+        {/* Center nav links — desktop only */}
+        <nav className="hidden md:flex items-center gap-6">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-white/70 hover:text-white text-sm font-medium transition-colors duration-200"
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
 
         {/* Mobile: hamburger */}
         <button
@@ -92,13 +114,25 @@ export default function Navbar() {
               backdropFilter: "blur(20px)",
             }}
           >
-            <div className="flex justify-center py-4 px-6">
-              <GlowButton href={`tel:${phone.replace(/-/g, "")}`} size="sm">
-                <span className="flex items-center gap-2" dir="ltr">
-                  <FaPhone className="text-xs" />
-                  <span>{phone}</span>
-                </span>
-              </GlowButton>
+            <div className="flex flex-col gap-1 py-4 px-6">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="py-3 px-4 text-white/80 hover:text-white text-base border-b border-white/10"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <div className="pt-3 flex justify-center">
+                <GlowButton href={`tel:${phone.replace(/-/g, "")}`} size="sm">
+                  <span className="flex items-center gap-2" dir="ltr">
+                    <FaPhone className="text-xs" />
+                    <span>{phone}</span>
+                  </span>
+                </GlowButton>
+              </div>
             </div>
           </motion.div>
         )}

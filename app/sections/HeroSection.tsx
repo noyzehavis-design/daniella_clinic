@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import AmbientBackground from "@/app/components/ui/AmbientBackground";
+import { FaPhone } from "react-icons/fa";
 import GlowButton from "@/app/components/ui/GlowButton";
 import { useContent } from "@/app/lib/ContentContext";
 
@@ -35,24 +35,49 @@ const fadeUp = (delay: number) => ({
 
 export default function HeroSection() {
   const { content } = useContent();
-  const { heading, subheading, ctaText } = content.hero;
-  return (
-    <section className="relative h-screen overflow-hidden bg-dark flex flex-col items-center justify-center">
-      {/* Ambient orbs */}
-      <AmbientBackground variant="dark" />
+  const { heading, subheading } = content.hero;
+  const { phone } = content.clinic;
+  const phoneClean = phone.replace(/-/g, "");
 
-      {/* Grid overlay */}
+  return (
+    <section className="relative h-screen overflow-hidden bg-dark flex flex-col items-end md:items-center justify-center">
+      {/* Video background */}
+      <video
+        src="/videos/hero.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ zIndex: 0 }}
+      />
+
+      {/* Dark overlay */}
       <div
-        className="absolute inset-0 z-[1]"
+        className="absolute inset-0"
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(74,191,191,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(74,191,191,0.03) 1px,transparent 1px)",
-          backgroundSize: "60px 60px",
+          zIndex: 1,
+          background:
+            "linear-gradient(to bottom, rgba(10,18,26,0.55) 0%, rgba(10,18,26,0.45) 60%, rgba(10,18,26,0.65) 100%)",
+        }}
+      />
+
+      {/* Teal tint */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 2,
+          background: `
+            radial-gradient(ellipse at 20% 50%, rgba(74,191,191,0.08) 0%, transparent 55%),
+            radial-gradient(ellipse at 80% 20%, rgba(45,158,158,0.05) 0%, transparent 50%)
+          `,
+          pointerEvents: "none",
         }}
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto">
+      <div className="relative z-10 flex flex-col items-end md:items-center text-right md:text-center px-4 max-w-4xl mx-auto w-full">
         {/* Eyebrow pill */}
         <motion.div {...fadeUp(0.1)}>
           <span className="inline-block bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm px-4 py-1.5 rounded-full mb-6">
@@ -80,17 +105,20 @@ export default function HeroSection() {
         {/* Buttons */}
         <motion.div
           {...fadeUp(0.7)}
-          className="flex flex-col sm:flex-row gap-4 items-center justify-center"
+          className="flex flex-col sm:flex-row gap-4 items-end md:items-center justify-end md:justify-center"
         >
           <GlowButton href="#footer-form" size="lg">
-            {ctaText}
+            שיחת ייעוץ חינם
           </GlowButton>
           <a
-            href="#inline-form"
-            className="px-8 py-4 text-lg font-semibold text-white border-2 border-white/30 rounded-[50px]
-                       hover:border-primary hover:text-primary transition-all duration-300 cursor-pointer"
+            href={`tel:${phoneClean}`}
+            className="flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white
+                       border-2 border-white/40 rounded-[50px] hover:border-primary hover:text-primary
+                       transition-all duration-300"
+            dir="ltr"
           >
-            גלי עוד ↓
+            <FaPhone className="text-sm" />
+            {phone}
           </a>
         </motion.div>
 
@@ -99,6 +127,28 @@ export default function HeroSection() {
           ⭐ 5.0 · +500 מטופלים מרוצים · 15 שנות ניסיון
         </motion.p>
       </div>
+
+      {/* Scroll-down arrow */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 cursor-pointer"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        onClick={() =>
+          document.getElementById("trust-bar")?.scrollIntoView({ behavior: "smooth" })
+        }
+      >
+        <span className="text-white/50 text-xs">גלול למטה</span>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="rgba(255,255,255,0.5)"
+          strokeWidth="2"
+        >
+          <path d="M12 5v14M5 12l7 7 7-7" />
+        </svg>
+      </motion.div>
     </section>
   );
 }

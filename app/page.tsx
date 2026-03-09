@@ -30,17 +30,17 @@ export default function Home() {
       >
         <HeroSection />
         <SectionDivider />
-        <TrustBar />
+        <div id="trust-bar"><TrustBar /></div>
         <SectionDivider />
-        <ServiceFormSection />
+        <div id="services"><ServiceFormSection /></div>
         <SectionDivider />
-        <AboutDaniela />
+        <div id="about"><AboutDaniela /></div>
         <SectionDivider />
-        <PatientsSlider />
+        <div id="results"><PatientsSlider /></div>
         <SectionDivider />
-        <ClinicSection />
+        <div id="clinic"><ClinicSection /></div>
         <SectionDivider />
-        <TestimonialsSlider />
+        <div id="testimonials"><TestimonialsSlider /></div>
         <SectionDivider />
         <StaffSplit />
         <SectionDivider />
