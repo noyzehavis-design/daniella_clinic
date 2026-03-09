@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FaCheck } from "react-icons/fa";
 import GlowButton from "@/app/components/ui/GlowButton";
-import { siteContent } from "@/app/lib/content";
+import { useContent } from "@/app/lib/ContentContext";
 
 const formSchema = z.object({
   fullName: z.string().min(1, "שדה חובה"),
@@ -53,9 +53,10 @@ const bulletVariants = {
 };
 
 export default function ServiceFormSection() {
+  const { content } = useContent();
   const [submitted, setSubmitted] = useState(false);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const {
     register,
     handleSubmit,
@@ -80,17 +81,17 @@ export default function ServiceFormSection() {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <span className="inline-block bg-primary/10 text-primary text-sm font-bold px-3 py-1 rounded-full mb-4">
-              {siteContent.service.tag}
+              {content.service.tag}
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-dark mb-4">
-              {siteContent.service.heading}
+              {content.service.heading}
             </h2>
             <p className="text-textDark/70 mb-6 leading-relaxed">
-              {siteContent.service.description}
+              {content.service.description}
             </p>
 
             <ul className="space-y-3 mb-8">
-              {siteContent.service.bullets.map((b, i) => (
+              {content.service.bullets.map((b, i) => (
                 <motion.li
                   key={i}
                   custom={i}
@@ -110,8 +111,8 @@ export default function ServiceFormSection() {
               style={{ borderRadius: "32px", boxShadow: "0 25px 60px rgba(74,191,191,0.2)" }}
             >
               <Image
-                src={siteContent.service.image}
-                alt={siteContent.service.heading}
+                src={content.service.image}
+                alt={content.service.heading}
                 fill
                 className="object-cover"
                 sizes="(max-width:1024px) 100vw, 50vw"
@@ -146,13 +147,13 @@ export default function ServiceFormSection() {
                     <FaCheck className="text-primary text-2xl" />
                   </motion.div>
                   <p className="text-dark font-bold text-lg">
-                    {siteContent.forms.successMessage}
+                    {content.forms.successMessage}
                   </p>
                 </div>
               ) : (
                 <>
                   <h3 className="text-xl font-bold text-dark mb-6 text-center">
-                    {siteContent.forms.inlineTitle}
+                    {content.forms.inlineTitle}
                   </h3>
                   <form
                     onSubmit={handleSubmit(onSubmit)}
@@ -184,7 +185,7 @@ export default function ServiceFormSection() {
                         style={{ appearance: "none" }}
                       >
                         <option value="">בחרי שירות</option>
-                        {siteContent.forms.serviceOptions.map((opt) => (
+                        {content.forms.serviceOptions.map((opt) => (
                           <option key={opt} value={opt}>
                             {opt}
                           </option>
@@ -193,7 +194,7 @@ export default function ServiceFormSection() {
                       <ErrorMsg msg={errors.serviceType?.message} />
                     </Field>
                     <GlowButton fullWidth size="lg">
-                      {isSubmitting ? "שולח..." : siteContent.forms.submitText}
+                      {isSubmitting ? "שולח..." : content.forms.submitText}
                     </GlowButton>
                   </form>
                 </>

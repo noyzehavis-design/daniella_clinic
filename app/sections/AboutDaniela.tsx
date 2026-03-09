@@ -6,7 +6,7 @@ import { FaTooth, FaMedal, FaSmile, FaStar } from "react-icons/fa";
 import AmbientBackground from "@/app/components/ui/AmbientBackground";
 import GlassCard from "@/app/components/ui/GlassCard";
 import GlowButton from "@/app/components/ui/GlowButton";
-import { siteContent } from "@/app/lib/content";
+import { useContent } from "@/app/lib/ContentContext";
 
 const iconMap: Record<string, React.ElementType> = {
   FaTooth,
@@ -17,8 +17,9 @@ const iconMap: Record<string, React.ElementType> = {
 
 export default function AboutDaniela() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const { name, title, bio, image, strengths, ctaText } = siteContent.about;
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { content } = useContent();
+  const { name, title, bio, image, strengths, ctaText } = content.about;
 
   return (
     <section className="relative bg-dark py-16 md:py-24 overflow-hidden">

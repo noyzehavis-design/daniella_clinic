@@ -1,10 +1,10 @@
 "use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { siteContent } from "@/app/lib/content";
+import { useContent } from "@/app/lib/ContentContext";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "שם חייב להכיל לפחות 2 תווים"),
@@ -16,10 +16,13 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl bg-white/90 text-gray-800 placeholder-gray-400 border border-transparent focus:outline-none focus:ring-2 focus:ring-white/60 text-right";
+  "w-full px-4 py-3 rounded-xl bg-white/90 text-gray-800 placeholder-gray-400 border border-transparent focus:outline-none focus:ring-2 focus:border-[#4ABFBF] focus:ring-[#4ABFBF]/40 text-right";
 
 export default function FooterForm() {
+  const { content } = useContent();
   const [submitted, setSubmitted] = useState(false);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const {
     register,
     handleSubmit,
@@ -37,9 +40,15 @@ export default function FooterForm() {
       className="py-16 md:py-24"
       style={{ background: "linear-gradient(135deg, #4ABFBF 0%, #2D9E9E 100%)" }}
     >
-      <div className="max-w-lg mx-auto px-4 text-center text-white">
+      <motion.div
+        ref={ref}
+        className="max-w-lg mx-auto px-4 text-center text-white"
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6 }}
+      >
         <h2 className="text-3xl md:text-4xl font-bold mb-8">
-          {siteContent.forms.footerTitle}
+          {content.forms.footerTitle}
         </h2>
 
         {submitted ? (
@@ -68,7 +77,7 @@ export default function FooterForm() {
                 />
               </svg>
             </div>
-            <p className="text-xl font-semibold">{siteContent.forms.successMessage}</p>
+            <p className="text-xl font-semibold">{content.forms.successMessage}</p>
           </motion.div>
         ) : (
           <form
@@ -111,7 +120,7 @@ export default function FooterForm() {
                 style={{ appearance: "none" }}
               >
                 <option value="">בחרי שירות *</option>
-                {siteContent.forms.serviceOptions.map((opt) => (
+                {content.forms.serviceOptions.map((opt) => (
                   <option key={opt} value={opt}>
                     {opt}
                   </option>
@@ -127,13 +136,13 @@ export default function FooterForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-4 rounded-full bg-white text-[#2D9E9E] font-bold text-lg hover:bg-white/90 transition-colors shadow-lg mt-2 disabled:opacity-70"
+              className="w-full py-4 rounded-full bg-white text-[#2D9E9E] font-bold text-lg hover:bg-white/90 transition-colors shadow-lg mt-2 disabled:opacity-70 cursor-pointer"
             >
-              {isSubmitting ? "שולח..." : siteContent.forms.submitText}
+              {isSubmitting ? "שולח..." : content.forms.submitText}
             </button>
           </form>
         )}
-      </div>
+      </motion.div>
     </section>
   );
 }

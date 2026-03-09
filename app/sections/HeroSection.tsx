@@ -3,9 +3,7 @@
 import { motion } from "framer-motion";
 import AmbientBackground from "@/app/components/ui/AmbientBackground";
 import GlowButton from "@/app/components/ui/GlowButton";
-import { siteContent } from "@/app/lib/content";
-
-const { heading, subheading, ctaText } = siteContent.hero;
+import { useContent } from "@/app/lib/ContentContext";
 
 function HeadingWithGradient({ text }: { text: string }) {
   const keyword = "מושלם";
@@ -36,6 +34,8 @@ const fadeUp = (delay: number) => ({
 });
 
 export default function HeroSection() {
+  const { content } = useContent();
+  const { heading, subheading, ctaText } = content.hero;
   return (
     <section className="relative h-screen overflow-hidden bg-dark flex flex-col items-center justify-center">
       {/* Ambient orbs */}
@@ -56,7 +56,7 @@ export default function HeroSection() {
         {/* Eyebrow pill */}
         <motion.div {...fadeUp(0.1)}>
           <span className="inline-block bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm px-4 py-1.5 rounded-full mb-6">
-            {siteContent.clinic.tagline}
+            {content.clinic.tagline}
           </span>
         </motion.div>
 
@@ -88,7 +88,7 @@ export default function HeroSection() {
           <a
             href="#inline-form"
             className="px-8 py-4 text-lg font-semibold text-white border-2 border-white/30 rounded-[50px]
-                       hover:border-primary hover:text-primary transition-all duration-300"
+                       hover:border-primary hover:text-primary transition-all duration-300 cursor-pointer"
           >
             גלי עוד ↓
           </a>

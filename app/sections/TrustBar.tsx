@@ -2,7 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { FaTooth, FaMedal, FaStar, FaChild } from "react-icons/fa";
-import { siteContent } from "@/app/lib/content";
+import { useContent } from "@/app/lib/ContentContext";
 
 const iconMap: Record<string, React.ElementType> = {
   FaTooth,
@@ -34,9 +34,10 @@ function CountUp({ target, inView }: { target: number; inView: boolean }) {
 }
 
 export default function TrustBar() {
-  const { items } = siteContent.trustBar;
+  const { content } = useContent();
+  const { items } = content.trustBar;
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
     <section

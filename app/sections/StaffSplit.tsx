@@ -1,9 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import GlowButton from "@/app/components/ui/GlowButton";
-import { siteContent } from "@/app/lib/content";
+import { SiteContent } from "@/app/lib/content";
+import { useContent } from "@/app/lib/ContentContext";
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
@@ -16,7 +17,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-type StaffMember = typeof siteContent.staff_split.left;
+type StaffMember = SiteContent["staff_split"]["left"];
 
 const bulletVariants = {
   hidden: {},
@@ -128,11 +129,20 @@ function StaffPanel({ data }: { data: StaffMember }) {
 }
 
 export default function StaffSplit() {
-  const { left, right } = siteContent.staff_split;
+  const { content } = useContent();
+  const { left, right } = content.staff_split;
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
   return (
-    <section className="flex flex-col md:flex-row w-full">
+    <motion.section
+      ref={sectionRef}
+      className="flex flex-col md:flex-row w-full"
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6 }}
+    >
       <StaffPanel data={left} />
       <StaffPanel data={right} />
-    </section>
+    </motion.section>
   );
 }

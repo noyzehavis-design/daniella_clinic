@@ -6,7 +6,7 @@ import { FaTooth, FaShieldAlt, FaSearch } from "react-icons/fa";
 import GlassCard from "@/app/components/ui/GlassCard";
 import SectionHeading from "@/app/components/ui/SectionHeading";
 import GlowButton from "@/app/components/ui/GlowButton";
-import { siteContent } from "@/app/lib/content";
+import { useContent } from "@/app/lib/ContentContext";
 
 const iconMap: Record<string, React.ElementType> = {
   FaScan: FaSearch,
@@ -25,8 +25,9 @@ const cardVariants = {
 
 export default function ClinicSection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const { heading, team, tech, ctaText } = siteContent.clinic_section;
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { content } = useContent();
+  const { heading, team, tech, ctaText } = content.clinic_section;
 
   return (
     <section ref={ref} className="bg-lightBg py-16 md:py-24">

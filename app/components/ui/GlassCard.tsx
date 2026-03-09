@@ -25,7 +25,12 @@ export default function GlassCard({
     <motion.div
       className={`backdrop-blur-[20px] border rounded-[var(--radius-xl)] ${base} ${className}`}
       style={style}
-      whileHover={hover ? { scale: 1.02, borderColor: "var(--primary)" } : undefined}
+      whileHover={hover ? {
+        scale: 1.02,
+        y: -4,
+        borderColor: "var(--primary)",
+        boxShadow: "0 20px 40px rgba(74,191,191,0.2)"
+      } : undefined}
       transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
     >
       {children}

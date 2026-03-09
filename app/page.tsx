@@ -1,3 +1,5 @@
+"use client";
+import { motion } from "framer-motion";
 import Navbar from "@/app/components/Navbar";
 import HeroSection from "@/app/sections/HeroSection";
 import TrustBar from "@/app/sections/TrustBar";
@@ -12,23 +14,42 @@ import FooterForm from "@/app/sections/FooterForm";
 import Footer from "@/app/components/Footer";
 import FloatingButtons from "@/app/components/FloatingButtons";
 
+const SectionDivider = () => (
+  <div style={{ height: "2px", background: "linear-gradient(to left, transparent, #4ABFBF 50%, transparent)" }} />
+);
+
 export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen">
+      <motion.main
+        className="min-h-screen"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
         <HeroSection />
+        <SectionDivider />
         <TrustBar />
+        <SectionDivider />
         <ServiceFormSection />
+        <SectionDivider />
         <AboutDaniela />
+        <SectionDivider />
         <PatientsSlider />
+        <SectionDivider />
         <ClinicSection />
+        <SectionDivider />
         <TestimonialsSlider />
+        <SectionDivider />
         <StaffSplit />
+        <SectionDivider />
         <VideosSection />
+        <SectionDivider />
         <FooterForm />
+        <SectionDivider />
         <Footer />
-      </main>
+      </motion.main>
       <FloatingButtons />
     </>
   );

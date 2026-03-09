@@ -9,12 +9,13 @@ import { FaStar, FaGoogle } from "react-icons/fa";
 import AmbientBackground from "@/app/components/ui/AmbientBackground";
 import GlassCard from "@/app/components/ui/GlassCard";
 import SectionHeading from "@/app/components/ui/SectionHeading";
-import { siteContent } from "@/app/lib/content";
+import { useContent } from "@/app/lib/ContentContext";
 
 export default function TestimonialsSlider() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const { heading, items } = siteContent.testimonials;
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { content } = useContent();
+  const { heading, items } = content.testimonials;
 
   return (
     <section className="relative bg-dark py-16 md:py-24 overflow-hidden">

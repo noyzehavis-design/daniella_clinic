@@ -7,13 +7,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import SectionHeading from "@/app/components/ui/SectionHeading";
-import { siteContent } from "@/app/lib/content";
+import { useContent } from "@/app/lib/ContentContext";
 
 export default function VideosSection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [activeIndex, setActiveIndex] = useState(0);
-  const { heading, items } = siteContent.videos;
+  const { content } = useContent();
+  const { heading, items } = content.videos;
 
   const shouldLoad = (i: number) => Math.abs(i - activeIndex) <= 1;
 

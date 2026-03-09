@@ -7,12 +7,13 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { siteContent } from "@/app/lib/content";
+import { useContent } from "@/app/lib/ContentContext";
 
 export default function PatientsSlider() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const { heading, subheading, images } = siteContent.patients;
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { content } = useContent();
+  const { heading, subheading, images } = content.patients;
 
   return (
     <section className="bg-white py-16 md:py-24 overflow-hidden">
@@ -58,7 +59,7 @@ export default function PatientsSlider() {
                   <div className="relative w-full aspect-[4/3]">
                     <Image
                       src={img.src}
-                      alt={img.caption || `patient-${i + 1}`}
+                      alt={img.caption || `תמונת מטופל ${i + 1}`}
                       fill
                       className="object-cover"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
