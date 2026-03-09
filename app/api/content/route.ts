@@ -40,8 +40,8 @@ export async function GET() {
     return NextResponse.json(data ? JSON.parse(data as string) : defaultContent, {
       headers: { "Cache-Control": "no-store" },
     });
-  } catch {
-    return NextResponse.json(defaultContent);
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
   }
 }
 
