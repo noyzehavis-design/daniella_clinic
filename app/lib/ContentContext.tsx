@@ -36,9 +36,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify(c),
     });
     const json = await res.json();
-    if (!json.ok) {
-      alert("שגיאה בשמירה: " + JSON.stringify(json));
-    }
+    alert("תשובה: " + JSON.stringify(json));
   };
 
   return (
