@@ -47,7 +47,7 @@ export default function HeroSection() {
   const phoneClean = phone.replace(/-/g, "");
 
   return (
-    <section className="relative h-screen overflow-hidden bg-dark flex flex-col items-start md:items-center justify-center">
+    <section className="relative h-screen overflow-hidden bg-dark flex flex-col items-center justify-center">
       {/* Video background */}
       {videoUrl ? (
         (() => {
@@ -108,7 +108,7 @@ export default function HeroSection() {
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-start md:items-center text-right md:text-center px-4 max-w-4xl mx-auto w-full">
+      <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto w-full">
         {/* Eyebrow pill */}
         <motion.div {...fadeUp(0.1)}>
           <span className="inline-block bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm px-4 py-1.5 rounded-full mb-6">
@@ -136,7 +136,7 @@ export default function HeroSection() {
         {/* Buttons */}
         <motion.div
           {...fadeUp(0.7)}
-          className="flex flex-col sm:flex-row gap-4 items-start md:items-center justify-start md:justify-center"
+          className="flex flex-col sm:flex-row gap-4 items-center justify-center"
         >
           <GlowButton href="#footer-form" size="lg">
             שיחת ייעוץ חינם
