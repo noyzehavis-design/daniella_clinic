@@ -80,13 +80,26 @@ export default function ServiceFormSection() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <span className="inline-block bg-primary/10 text-primary text-sm font-bold px-3 py-1 rounded-full mb-4">
+            <div
+              className="relative w-full aspect-[4/3] overflow-hidden mb-6"
+              style={{ borderRadius: "32px", boxShadow: "0 25px 60px rgba(74,191,191,0.2)" }}
+            >
+              <Image
+                src={content.service.image}
+                alt={content.service.heading}
+                fill
+                className="object-cover"
+                sizes="(max-width:1024px) 100vw, 50vw"
+              />
+            </div>
+
+            <span className="inline-block bg-primary/10 text-primary text-sm font-bold px-3 py-1 rounded-full mb-4 text-center block">
               {content.service.tag}
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-dark mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-dark mb-4 text-center">
               {content.service.heading}
             </h2>
-            <p className="text-textDark/70 mb-6 leading-relaxed">
+            <p className="text-textDark/70 mb-6 leading-relaxed text-center">
               {content.service.description}
             </p>
 
@@ -98,26 +111,15 @@ export default function ServiceFormSection() {
                   initial="hidden"
                   animate={isInView ? "visible" : "hidden"}
                   variants={bulletVariants}
-                  className="flex items-center gap-3 border-l-[3px] border-primary bg-white shadow-sm rounded-xl p-4"
+                  className="flex items-center gap-3 bg-primary/5 border border-primary/15 rounded-2xl px-5 py-3.5"
                 >
-                  <FaCheck className="text-primary flex-shrink-0" />
-                  <span className="text-textDark/80">{b}</span>
+                  <span className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                    <FaCheck className="text-primary text-xs" />
+                  </span>
+                  <span className="text-textDark/80 font-medium">{b}</span>
                 </motion.li>
               ))}
             </ul>
-
-            <div
-              className="relative w-full aspect-[4/3] overflow-hidden"
-              style={{ borderRadius: "32px", boxShadow: "0 25px 60px rgba(74,191,191,0.2)" }}
-            >
-              <Image
-                src={content.service.image}
-                alt={content.service.heading}
-                fill
-                className="object-cover"
-                sizes="(max-width:1024px) 100vw, 50vw"
-              />
-            </div>
           </motion.div>
 
           {/* RIGHT column — sticky form card */}
