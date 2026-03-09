@@ -12,15 +12,29 @@ export function ContentProvider({ children }: { children: ReactNode }) {
   const [content, setContentState] = useState<SiteContent>(defaultContent);
 
   useEffect(() => {
+    // Try localStorage first for instant load, then sync from KV
     try {
-      const raw = localStorage.getItem("siteContent");
-      if (raw) setContentState(JSON.parse(raw));
+      const cached = localStorage.getItem("siteContent");
+      if (cached) setContentState(JSON.parse(cached));
     } catch {}
+
+    fetch("/api/content")
+      .then((r) => r.json())
+      .then((data) => {
+        setContentState(data);
+        localStorage.setItem("siteContent", JSON.stringify(data));
+      })
+      .catch(() => {});
   }, []);
 
   const setContent = (c: SiteContent) => {
     setContentState(c);
     localStorage.setItem("siteContent", JSON.stringify(c));
+    fetch("/api/content", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(c),
+    }).catch(() => {});
   };
 
   return (
