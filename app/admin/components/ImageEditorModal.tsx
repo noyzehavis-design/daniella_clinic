@@ -31,6 +31,15 @@ async function getCroppedImg(imageSrc: string, pixelCrop: Area, rotation = 0): P
   croppedCanvas.height = pixelCrop.height;
   const croppedCtx = croppedCanvas.getContext("2d")!;
 
+  // Cap output dimensions to 1200px on the longest side to keep base64 small
+  const MAX = 1200;
+  const scale = Math.min(1, MAX / Math.max(pixelCrop.width, pixelCrop.height));
+  const outW = Math.round(pixelCrop.width * scale);
+  const outH = Math.round(pixelCrop.height * scale);
+
+  croppedCanvas.width = outW;
+  croppedCanvas.height = outH;
+
   croppedCtx.drawImage(
     canvas,
     pixelCrop.x,
@@ -39,11 +48,12 @@ async function getCroppedImg(imageSrc: string, pixelCrop: Area, rotation = 0): P
     pixelCrop.height,
     0,
     0,
-    pixelCrop.width,
-    pixelCrop.height,
+    outW,
+    outH,
   );
 
-  return croppedCanvas.toDataURL("image/png");
+  // JPEG at 0.82 quality — ~10× smaller than PNG, well under API limits
+  return croppedCanvas.toDataURL("image/jpeg", 0.82);
 }
 
 interface Props {
