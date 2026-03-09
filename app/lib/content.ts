@@ -25,7 +25,7 @@ export type SiteContent = {
     backgroundImage: string;
   };
   trustBar: {
-    items: { icon: string; number?: string; label: string }[];
+    items: { icon: string; number?: string; text?: string; label: string }[];
   };
   service: {
     tag: string;
@@ -127,7 +127,7 @@ export const siteContent: SiteContent = {
     items: [
       { icon: "FaTooth", number: "+500", label: "מטופלים מרוצים" },
       { icon: "FaMedal", label: "15+ שנות ניסיון" },
-      { icon: "FaStar", label: "טכנולוגיית iTero" },
+      { icon: "FaStar", text: "iTero", label: "טכנולוגיה מתקדמת" },
       { icon: "FaChild", label: "ידידותי לילדים מגיל 8" },
     ],
   },

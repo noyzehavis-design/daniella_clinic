@@ -250,6 +250,11 @@ export default function AdminPage() {
                   items[i] = { ...items[i], number: v };
                   updateDraft("trustBar", { items });
                 }} />
+                <Field label="טקסט גדול (אופציונלי, למשל iTero)" value={item.text ?? ""} onChange={v => {
+                  const items = [...draft.trustBar.items];
+                  items[i] = { ...items[i], text: v || undefined };
+                  updateDraft("trustBar", { items });
+                }} />
                 <Field label="תווית" value={item.label} onChange={v => {
                   const items = [...draft.trustBar.items];
                   items[i] = { ...items[i], label: v };

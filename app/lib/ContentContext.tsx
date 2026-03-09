@@ -15,14 +15,19 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     // Try localStorage first for instant load, then sync from KV
     try {
       const cached = localStorage.getItem("siteContent");
-      if (cached) setContentState(JSON.parse(cached));
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        // Merge with defaults so missing keys don't crash
+        setContentState({ ...defaultContent, ...parsed });
+      }
     } catch {}
 
     fetch("/api/content")
       .then((r) => r.json())
       .then((data) => {
-        setContentState(data);
-        localStorage.setItem("siteContent", JSON.stringify(data));
+        const merged = { ...defaultContent, ...data };
+        setContentState(merged);
+        localStorage.setItem("siteContent", JSON.stringify(merged));
       })
       .catch(() => {});
   }, []);

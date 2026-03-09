@@ -83,9 +83,22 @@ export default function TrustBar() {
                     <CountUp target={numVal} inView={isInView} />
                   </p>
                 )}
+                {item.text && (
+                  <p
+                    className="text-[2rem] font-bold mb-0.5"
+                    style={{
+                      background: "linear-gradient(135deg, #4ABFBF, #7DD8D8)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    {item.text}
+                  </p>
+                )}
                 <p
                   className={
-                    item.number
+                    item.number || item.text
                       ? "text-[0.85rem] text-textSecondary"
                       : "text-base font-bold text-textPrimary"
                   }
