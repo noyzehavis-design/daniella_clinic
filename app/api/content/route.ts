@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { createClient } from "@libsql/client";
 import { NextResponse } from "next/server";
 import { siteContent as defaultContent } from "@/app/lib/content";
