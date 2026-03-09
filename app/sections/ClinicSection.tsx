@@ -106,7 +106,7 @@ export default function ClinicSection() {
             href="#footer-form"
             className="!bg-white !text-primary !from-white !to-white shadow-[0_4px_24px_rgba(255,255,255,0.4)]"
           >
-            לתיאום תור ←
+            {ctaText}
           </GlowButton>
         </motion.div>
       </div>
