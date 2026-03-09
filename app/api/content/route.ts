@@ -45,14 +45,33 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    await ensureTable();
     const body = await request.json();
     const client = getClient();
-    await client.execute({
-      sql: "UPDATE site_content SET data = ? WHERE id = 1",
-      args: [JSON.stringify(body)],
-    });
-    return NextResponse.json({ ok: true });
+
+    // Check row exists
+    const check = await client.execute("SELECT COUNT(*) as count FROM site_content WHERE id = 1");
+    const count = Number(check.rows[0].count);
+
+    const serialized = JSON.stringify(body);
+
+    if (count === 0) {
+      await client.execute({
+        sql: "INSERT INTO site_content (id, data) VALUES (1, ?)",
+        args: [serialized],
+      });
+    } else {
+      await client.execute({
+        sql: "UPDATE site_content SET data = ? WHERE id = 1",
+        args: [serialized],
+      });
+    }
+
+    // Read back to confirm
+    const verify = await client.execute("SELECT data FROM site_content WHERE id = 1");
+    const saved = verify.rows[0]?.data as string;
+    const savedHeading = JSON.parse(saved)?.hero?.heading;
+
+    return NextResponse.json({ ok: true, rowExisted: count > 0, savedHeading });
   } catch (e) {
     return NextResponse.json({ ok: false, error: String(e) }, { status: 500 });
   }
