@@ -37,7 +37,9 @@ export async function GET() {
     const client = getClient();
     const result = await client.execute("SELECT data FROM site_content WHERE id = 1");
     const data = result.rows[0]?.data;
-    return NextResponse.json(data ? JSON.parse(data as string) : defaultContent);
+    return NextResponse.json(data ? JSON.parse(data as string) : defaultContent, {
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch {
     return NextResponse.json(defaultContent);
   }
