@@ -1,5 +1,6 @@
 import { createClient } from "@libsql/client";
 import { NextResponse } from "next/server";
+import { siteContent as defaultContent } from "@/app/lib/content";
 
 export async function GET() {
   const url = (process.env.TURSO_DATABASE_URL || "").replace("libsql://", "https://");
@@ -9,16 +10,15 @@ export async function GET() {
     const client = createClient({ url, authToken: token });
     await client.execute("CREATE TABLE IF NOT EXISTS site_content (id INTEGER PRIMARY KEY, data TEXT NOT NULL)");
 
-    // Test write
+    // Reset DB with proper default content
+    await client.execute("DELETE FROM site_content");
     await client.execute({
-      sql: "UPDATE site_content SET data = ? WHERE id = 1",
-      args: [JSON.stringify({ test: "write_works_" + Date.now() })],
+      sql: "INSERT INTO site_content (id, data) VALUES (1, ?)",
+      args: [JSON.stringify(defaultContent)],
     });
 
-    // Read back
-    const result = await client.execute("SELECT data FROM site_content WHERE id = 1");
-    return NextResponse.json({ ok: true, url, data: result.rows[0]?.data });
+    return NextResponse.json({ ok: true, message: "DB reset with default content" });
   } catch (e) {
-    return NextResponse.json({ ok: false, url, error: String(e) }, { status: 500 });
+    return NextResponse.json({ ok: false, error: String(e) }, { status: 500 });
   }
 }

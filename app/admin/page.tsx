@@ -121,8 +121,8 @@ export default function AdminPage() {
     setTimeout(() => setToast(""), 2500);
   };
 
-  const save = () => {
-    setContent(draft);
+  const save = async () => {
+    await setContent(draft);
     showToast();
   };
 

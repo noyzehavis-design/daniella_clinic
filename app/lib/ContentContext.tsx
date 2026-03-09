@@ -2,10 +2,10 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { SiteContent, siteContent as defaultContent } from "./content";
 
-type Ctx = { content: SiteContent; setContent: (c: SiteContent) => void };
+type Ctx = { content: SiteContent; setContent: (c: SiteContent) => Promise<void> };
 export const ContentContext = createContext<Ctx>({
   content: defaultContent,
-  setContent: () => {},
+  setContent: async () => {},
 });
 
 export function ContentProvider({ children }: { children: ReactNode }) {
@@ -27,14 +27,18 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       .catch(() => {});
   }, []);
 
-  const setContent = (c: SiteContent) => {
+  const setContent = async (c: SiteContent) => {
     setContentState(c);
     localStorage.setItem("siteContent", JSON.stringify(c));
-    fetch("/api/content", {
+    const res = await fetch("/api/content", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(c),
-    }).catch(() => {});
+    });
+    const json = await res.json();
+    if (!json.ok) {
+      alert("שגיאה בשמירה: " + JSON.stringify(json));
+    }
   };
 
   return (
