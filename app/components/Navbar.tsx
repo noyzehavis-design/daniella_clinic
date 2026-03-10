@@ -41,7 +41,7 @@ export default function Navbar() {
               backgroundColor: "rgba(15,25,35,0.85)",
               backdropFilter: "blur(20px)",
             }
-          : { backgroundColor: "rgba(10,18,26,0.2)", backdropFilter: "blur(4px)" }
+          : { backgroundColor: "rgba(0,0,0,0)" }
       }
     >
       {/* Scroll progress bar */}
@@ -59,10 +59,11 @@ export default function Navbar() {
           <Image
             src="/clinic-logo.png"
             alt="לוגו קליניקת דניאלה"
-            width={120}
-            height={48}
+            width={584}
+            height={104}
             className="h-10 md:h-12 w-auto object-contain"
             priority
+            quality={90}
           />
         </a>
 

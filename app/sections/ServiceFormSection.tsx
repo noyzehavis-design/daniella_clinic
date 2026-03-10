@@ -89,16 +89,17 @@ export default function ServiceFormSection() {
       <div className="max-w-7xl mx-auto px-4">
         <div
           ref={ref}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-10 items-start"
         >
-          {/* LEFT column — service info */}
+          {/* Child 1 — Image (desktop: col1 row1; mobile: first) */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
+            className="lg:col-start-2 lg:row-start-1"
+            initial={{ opacity: 0, x: -40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <div
-              className="relative w-full aspect-[4/3] overflow-hidden mb-6"
+              className="relative w-full aspect-[4/3] overflow-hidden"
               style={{ borderRadius: "32px", boxShadow: "0 25px 60px rgba(74,191,191,0.2)" }}
             >
               <Image
@@ -109,7 +110,15 @@ export default function ServiceFormSection() {
                 sizes="(max-width:1024px) 100vw, 50vw"
               />
             </div>
+          </motion.div>
 
+          {/* Child 2 — Text content (desktop: col2 row1+2; mobile: second) */}
+          <motion.div
+            className="lg:col-start-1 lg:row-start-1"
+            initial={{ opacity: 0, x: 40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <span className="inline-block bg-primary/10 text-primary text-sm font-bold px-3 py-1 rounded-full mb-4 text-center block">
               {content.service.tag}
             </span>
@@ -141,16 +150,31 @@ export default function ServiceFormSection() {
                 </motion.li>
               ))}
             </ul>
+
+            {/* Trust badge — Israel Orthodontic Society */}
+            <div className="mt-8 inline-flex items-center gap-3 bg-primary rounded-xl px-4 py-3 shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white/80 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+              </svg>
+              <Image
+                src="/ortho-society.png"
+                alt="האגודה האורתודונטית בישראל"
+                width={100}
+                height={32}
+                className="h-8 w-auto object-contain flex-shrink-0"
+              />
+              <span className="text-sm font-semibold text-white">חברה באגודת האורתודונטים</span>
+            </div>
           </motion.div>
 
-          {/* RIGHT column — sticky form card */}
-          <div className="lg:sticky lg:top-24">
+          {/* Child 3 — Form (desktop: full-width row2; mobile: third) */}
+          <div className="lg:col-span-2 lg:row-start-2">
             <motion.div
               id="inline-form"
-              initial={{ opacity: 0, x: -40 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-              className="p-8"
+              className="px-8 py-7"
               style={{
                 borderRadius: "32px",
                 background: "#ffffff",
@@ -181,50 +205,59 @@ export default function ServiceFormSection() {
                   </h3>
                   <form
                     onSubmit={handleSubmit(onSubmit)}
-                    className="space-y-5"
                     noValidate
                   >
-                    <Field label={content.forms.fieldName}>
-                      <input
-                        type="text"
-                        {...register("fullName")}
-                        className={inputClass(!!errors.fullName)}
-                        placeholder={content.forms.fieldName}
-                      />
-                      <ErrorMsg msg={errors.fullName?.message} />
-                    </Field>
-                    <Field label={content.forms.fieldPhone}>
-                      <input
-                        type="tel"
-                        {...register("phone")}
-                        className={inputClass(!!errors.phone)}
-                        placeholder="05XXXXXXXX"
-                      />
-                      <ErrorMsg msg={errors.phone?.message} />
-                    </Field>
-                    <Field label={content.forms.fieldService}>
-                      <select
-                        {...register("serviceType")}
-                        className={inputClass(!!errors.serviceType)}
-                        style={{ appearance: "none" }}
-                      >
-                        <option value="">בחרי שירות</option>
-                        {content.forms.serviceOptions.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
-                      <ErrorMsg msg={errors.serviceType?.message} />
-                    </Field>
+                    <div className="flex flex-col lg:flex-row lg:items-end lg:gap-5 gap-5">
+                      <div className="lg:flex-1">
+                        <Field label={content.forms.fieldName}>
+                          <input
+                            type="text"
+                            {...register("fullName")}
+                            className={inputClass(!!errors.fullName)}
+                            placeholder={content.forms.fieldName}
+                          />
+                          <ErrorMsg msg={errors.fullName?.message} />
+                        </Field>
+                      </div>
+                      <div className="lg:flex-1">
+                        <Field label={content.forms.fieldPhone}>
+                          <input
+                            type="tel"
+                            {...register("phone")}
+                            className={inputClass(!!errors.phone)}
+                            placeholder="05XXXXXXXX"
+                          />
+                          <ErrorMsg msg={errors.phone?.message} />
+                        </Field>
+                      </div>
+                      <div className="lg:flex-1">
+                        <Field label={content.forms.fieldService}>
+                          <select
+                            {...register("serviceType")}
+                            className={inputClass(!!errors.serviceType)}
+                            style={{ appearance: "none" }}
+                          >
+                            <option value="">בחרי שירות</option>
+                            {content.forms.serviceOptions.map((opt) => (
+                              <option key={opt} value={opt}>
+                                {opt}
+                              </option>
+                            ))}
+                          </select>
+                          <ErrorMsg msg={errors.serviceType?.message} />
+                        </Field>
+                      </div>
+                      <div className="lg:flex-shrink-0 lg:w-44">
+                        <GlowButton fullWidth size="lg">
+                          {isSubmitting ? "שולח..." : content.forms.submitText}
+                        </GlowButton>
+                      </div>
+                    </div>
                     {submitError && (
-                      <p className="text-red-400 text-sm text-center">
+                      <p className="text-red-400 text-sm text-center mt-3">
                         שגיאה בשליחה, נסי שוב מאוחר יותר
                       </p>
                     )}
-                    <GlowButton fullWidth size="lg">
-                      {isSubmitting ? "שולח..." : content.forms.submitText}
-                    </GlowButton>
                   </form>
                 </>
               )}

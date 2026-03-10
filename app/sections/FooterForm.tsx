@@ -117,7 +117,7 @@ export default function FooterForm() {
               <select
                 {...register("serviceType")}
                 className={inputClass}
-                style={{ appearance: "none" }}
+                style={{ appearance: "none", color: "#374151" }}
               >
                 <option value="">בחרי שירות *</option>
                 {content.forms.serviceOptions.map((opt) => (

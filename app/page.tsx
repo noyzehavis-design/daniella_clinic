@@ -10,6 +10,7 @@ import ClinicSection from "@/app/sections/ClinicSection";
 import TestimonialsSlider from "@/app/sections/TestimonialsSlider";
 import StaffSplit from "@/app/sections/StaffSplit";
 import VideosSection from "@/app/sections/VideosSection";
+import FaqSection from "@/app/sections/FaqSection";
 import FooterForm from "@/app/sections/FooterForm";
 import Footer from "@/app/components/Footer";
 import FloatingButtons from "@/app/components/FloatingButtons";
@@ -45,6 +46,8 @@ export default function Home() {
         <StaffSplit />
         <SectionDivider />
         <VideosSection />
+        <SectionDivider />
+        <FaqSection />
         <SectionDivider />
         <FooterForm />
         <SectionDivider />

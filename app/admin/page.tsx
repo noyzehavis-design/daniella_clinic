@@ -123,14 +123,24 @@ function ImageUpload({
         <div className="mt-2 flex items-start gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={value} alt="preview" className="h-24 rounded-lg object-cover border border-slate-700 flex-shrink-0" />
-          <button
-            type="button"
-            onClick={() => onChange("")}
-            className="w-7 h-7 flex items-center justify-center rounded-full bg-slate-700 hover:bg-red-500/80 text-slate-300 hover:text-white text-sm transition-colors"
-            title="הסר תמונה"
-          >
-            ✕
-          </button>
+          <div className="flex flex-col gap-1">
+            <button
+              type="button"
+              onClick={() => onCrop(value, onChange)}
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-teal-500/20 hover:bg-teal-500/40 text-teal-400 text-xs transition-colors"
+              title="ערוך תמונה"
+            >
+              ✎
+            </button>
+            <button
+              type="button"
+              onClick={() => onChange("")}
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-slate-700 hover:bg-red-500/80 text-slate-300 hover:text-white text-sm transition-colors"
+              title="הסר תמונה"
+            >
+              ✕
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -330,6 +340,7 @@ export default function AdminPage() {
     { id: "section-testimonials", label: "המלצות" },
     { id: "section-staff", label: "צוות" },
     { id: "section-videos", label: "סרטונים" },
+    { id: "section-faq", label: "שאלות נפוצות" },
     { id: "section-form-inline", label: "טופס מרכז" },
     { id: "section-form-footer", label: "טופס תחתית" },
     { id: "section-clinicinfo", label: "פרטי מרפאה" },
@@ -616,7 +627,8 @@ export default function AdminPage() {
               rows={3}
               onRichText={() => openRichText(draft.clinic_section.paragraph, v => updateDraft("clinic_section", { ...draft.clinic_section, paragraph: v }))}
             />
-            <Field label="טקסט כפתור" value={draft.clinic_section.ctaText} onChange={v => updateDraft("clinic_section", { ...draft.clinic_section, ctaText: v })} />
+            <Field label="כותרת באנר" value={draft.clinic_section.ctaText} onChange={v => updateDraft("clinic_section", { ...draft.clinic_section, ctaText: v })} />
+            <Field label="טקסט כפתור" value={draft.clinic_section.ctaButtonText} onChange={v => updateDraft("clinic_section", { ...draft.clinic_section, ctaButtonText: v })} />
 
             <SubLabel>צוות</SubLabel>
             <ArrayEditor
@@ -849,6 +861,45 @@ export default function AdminPage() {
                 if (j < 0 || j >= items.length) return;
                 [items[i], items[j]] = [items[j], items[i]];
                 updateDraft("videos", { ...draft.videos, items });
+              }}
+            />
+            <SaveButton onClick={save} disabled={isSaving} />
+          </div>
+        )}
+
+        {/* === FAQ === */}
+        {activeSection === "section-faq" && (
+          <div className="mb-6 rounded-xl border border-slate-700/60 bg-[#141E28] p-6 shadow-sm">
+            <SectionTitle>שאלות נפוצות</SectionTitle>
+            <Field
+              label="כותרת"
+              value={draft.faq.heading}
+              onChange={v => updateDraft("faq", { ...draft.faq, heading: v })}
+            />
+            <ArrayEditor
+              items={draft.faq.items}
+              renderItem={(item, i) => (
+                <div>
+                  <Field label="שאלה" value={item.question} onChange={v => {
+                    const items = [...draft.faq.items];
+                    items[i] = { ...items[i], question: v };
+                    updateDraft("faq", { ...draft.faq, items });
+                  }} />
+                  <Field label="תשובה" value={item.answer} rows={3} onChange={v => {
+                    const items = [...draft.faq.items];
+                    items[i] = { ...items[i], answer: v };
+                    updateDraft("faq", { ...draft.faq, items });
+                  }} />
+                </div>
+              )}
+              onAdd={() => updateDraft("faq", { ...draft.faq, items: [...draft.faq.items, { question: "", answer: "" }] })}
+              onDelete={i => updateDraft("faq", { ...draft.faq, items: draft.faq.items.filter((_, idx) => idx !== i) })}
+              onMove={(i, dir) => {
+                const items = [...draft.faq.items];
+                const j = i + dir;
+                if (j < 0 || j >= items.length) return;
+                [items[i], items[j]] = [items[j], items[i]];
+                updateDraft("faq", { ...draft.faq, items });
               }}
             />
             <SaveButton onClick={save} disabled={isSaving} />

@@ -55,6 +55,7 @@ export type SiteContent = {
     team: { name: string; role: string; image: string }[];
     tech: { icon: string; label: string; description: string }[];
     ctaText: string;
+    ctaButtonText: string;
   };
   testimonials: {
     heading: string;
@@ -90,6 +91,10 @@ export type SiteContent = {
     fieldName: string;
     fieldPhone: string;
     fieldService: string;
+  };
+  faq: {
+    heading: string;
+    items: { question: string; answer: string }[];
   };
   footer: {
     copyright: string;
@@ -219,6 +224,7 @@ export const siteContent: SiteContent = {
       },
     ],
     ctaText: "לתיאום תור במרפאה ←",
+    ctaButtonText: "לתיאום תור ←",
   },
 
   testimonials: {
@@ -299,6 +305,16 @@ export const siteContent: SiteContent = {
     fieldService: "סוג שירות",
   },
 
+  faq: {
+    heading: "שאלות נפוצות",
+    items: [
+      { question: "מה זה יישור שיניים שקוף?", answer: "יישור שקוף הוא שיטת יישור שיניים באמצעות סדרת מסילות שקופות וניתנות להסרה, המחליפות את הגשרים המסורתיים." },
+      { question: "מאיזה גיל מתאים הטיפול?", answer: "הטיפול מתאים מגיל 8 ומעלה, לילדים, נוער ומבוגרים כאחד." },
+      { question: "כמה זמן נמשך הטיפול?", answer: "משך הטיפול משתנה בהתאם למורכבות המקרה, בדרך כלל בין 6 חודשים לשנתיים." },
+      { question: "האם הטיפול כואב?", answer: "הטיפול עשוי לגרום לאי נוחות קלה בתחילת כל שלב חדש, אך הוא נחשב נוח בהרבה לעומת גשרים מסורתיים." },
+      { question: "כיצד מקבעים תור ייעוץ?", answer: "ניתן לפנות אלינו בטלפון, בוואטסאפ או דרך הטופס באתר ונחזור אליכם בהקדם." },
+    ],
+  },
   footer: {
     copyright: '© 2025 ד"ר דניאלה בלטר-אבן | כל הזכויות שמורות',
   },
