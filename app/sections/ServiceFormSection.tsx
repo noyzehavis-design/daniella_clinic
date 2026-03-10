@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
@@ -8,15 +8,6 @@ import { z } from "zod";
 import { FaCheck } from "react-icons/fa";
 import GlowButton from "@/app/components/ui/GlowButton";
 import { useContent } from "@/app/lib/ContentContext";
-
-const formSchema = z.object({
-  fullName: z.string().min(1, "שדה חובה"),
-  phone: z
-    .string()
-    .regex(/^(05\d{8}|077\d{7})$/, "מספר טלפון לא תקין (לדוגמה: 0521234567)"),
-  serviceType: z.string().min(1, "יש לבחור שירות"),
-});
-type FormData = z.infer<typeof formSchema>;
 
 const inputClass = (hasError?: boolean) =>
   `w-full border-[1.5px] rounded-xl px-4 py-[14px] outline-none transition-all duration-200
@@ -58,6 +49,17 @@ export default function ServiceFormSection() {
   const [submitError, setSubmitError] = useState(false);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const req = content.forms?.requiredFields;
+  const formSchema = useMemo(() => z.object({
+    fullName: req?.name !== false ? z.string().min(1, "שדה חובה") : z.string(),
+    phone: req?.phone !== false
+      ? z.string().regex(/^(05\d{8}|077\d{7})$/, "מספר טלפון לא תקין")
+      : z.string(),
+    serviceType: req?.service !== false ? z.string().min(1, "יש לבחור שירות") : z.string(),
+  }), [req?.name, req?.phone, req?.service]);
+  type FormData = z.infer<typeof formSchema>;
+
   const {
     register,
     handleSubmit,

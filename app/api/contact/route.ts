@@ -46,32 +46,34 @@ export async function POST(request: Request) {
     const { name, phone, serviceType } = await request.json();
 
     const to = await getContactEmail();
-    if (!to) {
-      return NextResponse.json({ ok: false, error: "no contact email configured" }, { status: 400 });
+    if (to) {
+      try {
+        const transporter = nodemailer.createTransport({
+          host: process.env.SMTP_HOST || "smtp.gmail.com",
+          port: Number(process.env.SMTP_PORT || 587),
+          secure: false,
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+          },
+        });
+
+        await transporter.sendMail({
+          from: process.env.SMTP_USER,
+          to,
+          subject: "פנייה חדשה מהאתר",
+          text: `פנייה חדשה מהאתר:\nשם: ${name}\nטלפון: ${phone}\nסוג שירות: ${serviceType}`,
+          html: `<div dir="rtl" style="font-family:Arial,sans-serif;font-size:15px">
+            <h2 style="color:#4ABFBF">פנייה חדשה מהאתר</h2>
+            <p><strong>שם:</strong> ${name}</p>
+            <p><strong>טלפון:</strong> ${phone}</p>
+            <p><strong>סוג שירות:</strong> ${serviceType}</p>
+          </div>`,
+        });
+      } catch (emailErr) {
+        console.error("Email send failed (non-fatal):", emailErr);
+      }
     }
-
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || "smtp.gmail.com",
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: process.env.SMTP_USER,
-      to,
-      subject: "פנייה חדשה מהאתר",
-      text: `פנייה חדשה מהאתר:\nשם: ${name}\nטלפון: ${phone}\nסוג שירות: ${serviceType}`,
-      html: `<div dir="rtl" style="font-family:Arial,sans-serif;font-size:15px">
-        <h2 style="color:#4ABFBF">פנייה חדשה מהאתר</h2>
-        <p><strong>שם:</strong> ${name}</p>
-        <p><strong>טלפון:</strong> ${phone}</p>
-        <p><strong>סוג שירות:</strong> ${serviceType}</p>
-      </div>`,
-    });
 
     return NextResponse.json({ ok: true });
   } catch (e) {

@@ -1,19 +1,10 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useContent } from "@/app/lib/ContentContext";
-
-const formSchema = z.object({
-  fullName: z.string().min(2, "שם חייב להכיל לפחות 2 תווים"),
-  phone: z
-    .string()
-    .regex(/^0[5-9]\d{8}$/, "מספר טלפון ישראלי לא תקין"),
-  serviceType: z.string().min(1, "בחרי שירות"),
-});
-type FormData = z.infer<typeof formSchema>;
 
 const inputClass =
   "w-full px-4 py-3 rounded-xl bg-white/90 text-gray-800 placeholder-gray-400 border border-transparent focus:outline-none focus:ring-2 focus:border-[#4ABFBF] focus:ring-[#4ABFBF]/40 text-base text-right";
@@ -21,16 +12,39 @@ const inputClass =
 export default function FooterForm() {
   const { content } = useContent();
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const req = content.forms?.requiredFields;
+  const formSchema = useMemo(() => z.object({
+    fullName: req?.name !== false ? z.string().min(1, "שדה חובה") : z.string(),
+    phone: req?.phone !== false
+      ? z.string().regex(/^(05\d{8}|077\d{7})$/, "מספר טלפון לא תקין")
+      : z.string(),
+    serviceType: req?.service !== false ? z.string().min(1, "יש לבחור שירות") : z.string(),
+  }), [req?.name, req?.phone, req?.service]);
+  type FormData = z.infer<typeof formSchema>;
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({ resolver: zodResolver(formSchema) });
 
-  const onSubmit = async (_data: FormData) => {
-    setSubmitted(true);
+  const onSubmit = async (data: FormData) => {
+    setSubmitError(false);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: data.fullName, phone: data.phone, serviceType: data.serviceType }),
+      });
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+    } catch {
+      setSubmitError(true);
+    }
   };
 
   return (
@@ -140,6 +154,12 @@ export default function FooterForm() {
             >
               {isSubmitting ? "שולח..." : content.forms.submitText}
             </button>
+
+            {submitError && (
+              <p className="text-white/80 text-sm text-center">
+                שגיאה בשליחה, נסי שוב מאוחר יותר
+              </p>
+            )}
           </form>
         )}
       </motion.div>

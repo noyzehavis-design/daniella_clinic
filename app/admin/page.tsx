@@ -23,7 +23,7 @@ function Field({
 }) {
   const cls =
     "w-full bg-[#0F1923] border border-slate-600/60 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-teal-400 transition-colors";
-  const showRichText = onRichText && rows && rows >= 3;
+  const showRichText = !!onRichText;
   return (
     <div className="mb-2.5">
       {label && (
@@ -405,8 +405,18 @@ export default function AdminPage() {
         {activeSection === "section-hero" && (
           <div className="mb-6 rounded-xl border border-slate-700/60 bg-[#141E28] p-6 shadow-sm">
             <SectionTitle>כותרת ראשית (Hero)</SectionTitle>
-            <Field label="כותרת" value={draft.hero.heading} onChange={v => updateDraft("hero", { ...draft.hero, heading: v })} />
-            <Field label="תת-כותרת" value={draft.hero.subheading} onChange={v => updateDraft("hero", { ...draft.hero, subheading: v })} />
+            <Field
+              label="כותרת"
+              value={draft.hero.heading}
+              onChange={v => updateDraft("hero", { ...draft.hero, heading: v })}
+              onRichText={() => openRichText(draft.hero.heading, v => updateDraft("hero", { ...draft.hero, heading: v }))}
+            />
+            <Field
+              label="תת-כותרת"
+              value={draft.hero.subheading}
+              onChange={v => updateDraft("hero", { ...draft.hero, subheading: v })}
+              onRichText={() => openRichText(draft.hero.subheading, v => updateDraft("hero", { ...draft.hero, subheading: v }))}
+            />
             <Field label="טקסט כפתור" value={draft.hero.ctaText} onChange={v => updateDraft("hero", { ...draft.hero, ctaText: v })} />
             <ImageUpload
               label="תמונת רקע"
@@ -476,7 +486,12 @@ export default function AdminPage() {
           <div className="mb-6 rounded-xl border border-slate-700/60 bg-[#141E28] p-6 shadow-sm">
             <SectionTitle>שירות</SectionTitle>
             <Field label="תג" value={draft.service.tag} onChange={v => updateDraft("service", { ...draft.service, tag: v })} />
-            <Field label="כותרת" value={draft.service.heading} onChange={v => updateDraft("service", { ...draft.service, heading: v })} />
+            <Field
+              label="כותרת"
+              value={draft.service.heading}
+              onChange={v => updateDraft("service", { ...draft.service, heading: v })}
+              onRichText={() => openRichText(draft.service.heading, v => updateDraft("service", { ...draft.service, heading: v }))}
+            />
             <TextArea
               label="תיאור"
               value={draft.service.description}
@@ -573,11 +588,13 @@ export default function AdminPage() {
               label="כותרת"
               value={draft.patients.heading}
               onChange={v => updateDraft("patients", { ...draft.patients, heading: v })}
+              onRichText={() => openRichText(draft.patients.heading, v => updateDraft("patients", { ...draft.patients, heading: v }))}
             />
             <Field
               label="תת-כותרת"
               value={draft.patients.subheading}
               onChange={v => updateDraft("patients", { ...draft.patients, subheading: v })}
+              onRichText={() => openRichText(draft.patients.subheading, v => updateDraft("patients", { ...draft.patients, subheading: v }))}
             />
             <ArrayEditor
               items={draft.patients.images}
@@ -619,8 +636,18 @@ export default function AdminPage() {
         {activeSection === "section-clinic" && (
           <div className="mb-6 rounded-xl border border-slate-700/60 bg-[#141E28] p-6 shadow-sm">
             <SectionTitle>המרפאה</SectionTitle>
-            <Field label="כותרת" value={draft.clinic_section.heading} onChange={v => updateDraft("clinic_section", { ...draft.clinic_section, heading: v })} />
-            <Field label="תת-כותרת" value={draft.clinic_section.subheading} onChange={v => updateDraft("clinic_section", { ...draft.clinic_section, subheading: v })} />
+            <Field
+              label="כותרת"
+              value={draft.clinic_section.heading}
+              onChange={v => updateDraft("clinic_section", { ...draft.clinic_section, heading: v })}
+              onRichText={() => openRichText(draft.clinic_section.heading, v => updateDraft("clinic_section", { ...draft.clinic_section, heading: v }))}
+            />
+            <Field
+              label="תת-כותרת"
+              value={draft.clinic_section.subheading}
+              onChange={v => updateDraft("clinic_section", { ...draft.clinic_section, subheading: v })}
+              onRichText={() => openRichText(draft.clinic_section.subheading, v => updateDraft("clinic_section", { ...draft.clinic_section, subheading: v }))}
+            />
             <Field
               label="פסקה"
               value={draft.clinic_section.paragraph}
@@ -876,6 +903,7 @@ export default function AdminPage() {
               label="כותרת"
               value={draft.faq.heading}
               onChange={v => updateDraft("faq", { ...draft.faq, heading: v })}
+              onRichText={() => openRichText(draft.faq.heading, v => updateDraft("faq", { ...draft.faq, heading: v }))}
             />
             <ArrayEditor
               items={draft.faq.items}
@@ -938,6 +966,25 @@ export default function AdminPage() {
                 updateDraft("forms", { ...draft.forms, serviceOptions });
               }}
             />
+            <SubLabel>שדות חובה</SubLabel>
+            {(["name","phone","service"] as const).map((key) => {
+              const labels = { name: "שם מלא", phone: "טלפון", service: "סוג שירות" };
+              const reqFields = draft.forms.requiredFields ?? { name: true, phone: true, service: true };
+              return (
+                <label key={key} className="flex items-center gap-2 mb-2 text-sm text-slate-300 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={reqFields[key] ?? true}
+                    onChange={(e) => setDraft(d => ({
+                      ...d,
+                      forms: { ...d.forms, requiredFields: { ...(d.forms.requiredFields ?? { name: true, phone: true, service: true }), [key]: e.target.checked } }
+                    }))}
+                    className="w-4 h-4 accent-teal-500"
+                  />
+                  {labels[key]} — שדה חובה
+                </label>
+              );
+            })}
             <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}

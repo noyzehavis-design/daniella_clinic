@@ -91,6 +91,7 @@ export type SiteContent = {
     fieldName: string;
     fieldPhone: string;
     fieldService: string;
+    requiredFields?: { name: boolean; phone: boolean; service: boolean };
   };
   faq: {
     heading: string;
@@ -310,6 +311,7 @@ export const siteContent: SiteContent = {
     fieldName: "שם מלא",
     fieldPhone: "טלפון",
     fieldService: "סוג שירות",
+    requiredFields: { name: true, phone: true, service: true },
   },
 
   faq: {
