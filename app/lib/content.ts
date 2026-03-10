@@ -99,6 +99,9 @@ export type SiteContent = {
   footer: {
     copyright: string;
   };
+  meta: {
+    facebookPixelCode: string;
+  };
 };
 
 export const siteContent: SiteContent = {
@@ -317,5 +320,8 @@ export const siteContent: SiteContent = {
   },
   footer: {
     copyright: '© 2025 ד"ר דניאלה בלטר-אבן | כל הזכויות שמורות',
+  },
+  meta: {
+    facebookPixelCode: "",
   },
 };

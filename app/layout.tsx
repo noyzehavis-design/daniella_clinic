@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import CursorDot from "@/app/components/CursorDot";
 import { ContentProvider } from "@/app/lib/ContentContext";
+import PixelScript from "@/app/components/PixelScript";
 
 export const metadata: Metadata = {
   title: 'ד"ר דניאלה בלטר-אבן | אורתודונטית מומחית – יישור שיניים שקוף בנהריה',
@@ -34,6 +35,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <ContentProvider>
+          <PixelScript />
           {children}
         </ContentProvider>
         <CursorDot />

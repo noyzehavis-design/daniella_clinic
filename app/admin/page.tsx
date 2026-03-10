@@ -1000,6 +1000,18 @@ export default function AdminPage() {
             <Field label="Instagram" value={draft.clinic.social.instagram} onChange={v => updateDraft("clinic", { ...draft.clinic, social: { ...draft.clinic.social, instagram: v } })} />
             <Field label="YouTube" value={draft.clinic.social.youtube} onChange={v => updateDraft("clinic", { ...draft.clinic, social: { ...draft.clinic.social, youtube: v } })} />
             <Field label="WhatsApp (מספר בלבד)" value={draft.clinic.social.whatsapp} onChange={v => updateDraft("clinic", { ...draft.clinic, social: { ...draft.clinic.social, whatsapp: v } })} />
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">
+                קוד Facebook Pixel (מוכנס לתגית head)
+              </label>
+              <textarea
+                rows={5}
+                className="w-full border border-slate-600 rounded-lg px-3 py-2 text-sm font-mono bg-[#0F1923] text-slate-200"
+                placeholder="הדבק כאן את קוד ה-Pixel המלא..."
+                value={draft.meta?.facebookPixelCode ?? ""}
+                onChange={(e) => setDraft((d) => ({ ...d, meta: { ...d.meta, facebookPixelCode: e.target.value } }))}
+              />
+            </div>
             <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}

@@ -83,25 +83,25 @@ export default function HeroSection() {
         />
       )}
 
-      {/* Dark overlay */}
+      {/* Deep teal-navy base overlay */}
       <div
         className="absolute inset-0"
         style={{
           zIndex: 1,
           background:
-            "linear-gradient(to bottom, rgba(10,18,26,0.55) 0%, rgba(10,18,26,0.45) 60%, rgba(10,18,26,0.65) 100%)",
+            "linear-gradient(135deg, rgba(0,80,90,0.72) 0%, rgba(5,20,35,0.78) 100%)",
         }}
       />
 
-      {/* Teal tint */}
+      {/* Vibrant teal accent overlay */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           zIndex: 2,
           background: `
-            radial-gradient(ellipse at 20% 50%, rgba(74,191,191,0.25) 0%, transparent 60%),
-            radial-gradient(ellipse at 80% 20%, rgba(45,158,158,0.18) 0%, transparent 55%)
+            linear-gradient(to bottom, rgba(74,191,191,0.30) 0%, rgba(74,191,191,0.10) 50%, rgba(45,158,158,0.22) 100%),
+            radial-gradient(ellipse at 30% 40%, rgba(74,191,191,0.35) 0%, transparent 55%)
           `,
           pointerEvents: "none",
         }}
