@@ -1,6 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { useContent } from "@/app/lib/ContentContext";
 
 interface SectionHeadingProps {
   eyebrow?: string;
@@ -8,6 +9,12 @@ interface SectionHeadingProps {
   className?: string;
   light?: boolean;
 }
+
+const sectionSizeMap = {
+  sm: "clamp(1.5rem,3vw,2rem)",
+  md: "clamp(2rem,5vw,3.5rem)",
+  lg: "clamp(2.5rem,6vw,4.5rem)",
+};
 
 export default function SectionHeading({
   eyebrow,
@@ -17,6 +24,9 @@ export default function SectionHeading({
 }: SectionHeadingProps) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const { content } = useContent();
+  const sizeKey = (content.typography?.sectionHeadingSize ?? "md") as keyof typeof sectionSizeMap;
+  const fontSize = sectionSizeMap[sizeKey] ?? sectionSizeMap.md;
 
   return (
     <motion.div
@@ -32,7 +42,8 @@ export default function SectionHeading({
         </p>
       )}
       <h2
-        className={`text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.1] ${
+        style={{ fontSize }}
+        className={`font-bold leading-[1.1] ${
           light ? "text-textPrimary" : "text-dark"
         }`}
       >

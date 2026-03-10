@@ -122,7 +122,7 @@ export default function ServiceFormSection() {
             <span className="inline-block bg-primary/10 text-primary text-sm font-bold px-3 py-1 rounded-full mb-4 text-center block">
               {content.service.tag}
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#0F1923] mb-4 text-center">
+            <h2 style={{ fontSize: { sm: "clamp(1.5rem,3vw,2rem)", md: "clamp(2rem,5vw,3.5rem)", lg: "clamp(2.5rem,6vw,4.5rem)" }[(content.typography?.sectionHeadingSize ?? "md") as "sm"|"md"|"lg"] }} className="font-bold text-[#0F1923] mb-4 text-center">
               {content.service.heading}
             </h2>
             {content.service.description.includes("<") ? (

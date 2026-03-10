@@ -102,6 +102,10 @@ export type SiteContent = {
   meta: {
     facebookPixelCode: string;
   };
+  typography: {
+    heroHeadingSize: "sm" | "md" | "lg";
+    sectionHeadingSize: "sm" | "md" | "lg";
+  };
 };
 
 export const siteContent: SiteContent = {
@@ -323,5 +327,9 @@ export const siteContent: SiteContent = {
   },
   meta: {
     facebookPixelCode: "",
+  },
+  typography: {
+    heroHeadingSize: "lg",
+    sectionHeadingSize: "md",
   },
 };

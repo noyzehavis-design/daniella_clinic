@@ -127,7 +127,7 @@ export default function HeroSection() {
         <motion.h1
           {...fadeUp(0.3)}
           className="font-extrabold text-white leading-[1.1] mb-5"
-          style={{ fontSize: "clamp(3rem, 8vw, 6rem)", fontWeight: 800 }}
+          style={{ fontSize: { sm: "clamp(2rem,5vw,3.5rem)", md: "clamp(2.5rem,6vw,4.5rem)", lg: "clamp(3rem,8vw,6rem)" }[(content.typography?.heroHeadingSize ?? "lg") as "sm"|"md"|"lg"] ?? "clamp(3rem,8vw,6rem)", fontWeight: 800 }}
         >
           <HeadingWithGradient text={heading} />
         </motion.h1>

@@ -61,7 +61,7 @@ export default function AboutDaniela() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-textPrimary mb-1">
+            <h2 style={{ fontSize: { sm: "clamp(1.5rem,3vw,2rem)", md: "clamp(2rem,5vw,3.5rem)", lg: "clamp(2.5rem,6vw,4.5rem)" }[(content.typography?.sectionHeadingSize ?? "md") as "sm"|"md"|"lg"] }} className="font-bold text-textPrimary mb-1">
               {name}
             </h2>
             <p className="text-primary font-semibold mb-4">{title}</p>

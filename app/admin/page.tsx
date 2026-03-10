@@ -344,6 +344,7 @@ export default function AdminPage() {
     { id: "section-form-inline", label: "טופס מרכז" },
     { id: "section-form-footer", label: "טופס תחתית" },
     { id: "section-clinicinfo", label: "פרטי מרפאה" },
+    { id: "section-typography", label: "גודל גופן" },
   ];
 
   return (
@@ -1012,6 +1013,59 @@ export default function AdminPage() {
                 onChange={(e) => setDraft((d) => ({ ...d, meta: { ...d.meta, facebookPixelCode: e.target.value } }))}
               />
             </div>
+            <SaveButton onClick={save} disabled={isSaving} />
+          </div>
+        )}
+
+        {/* === TYPOGRAPHY === */}
+        {activeSection === "section-typography" && (
+          <div className="mb-6 rounded-xl border border-slate-700/60 bg-[#141E28] p-6 shadow-sm">
+            <SectionTitle>גודל גופן</SectionTitle>
+
+            {/* Hero heading size */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-slate-300 mb-3">כותרת ראשית (Hero)</label>
+              <div className="flex gap-2">
+                {(["sm", "md", "lg"] as const).map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setDraft((d) => ({ ...d, typography: { ...d.typography, heroHeadingSize: s } }))}
+                    className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${
+                      (draft.typography?.heroHeadingSize ?? "lg") === s
+                        ? "bg-primary text-white border-primary"
+                        : "bg-transparent text-slate-300 border-slate-600 hover:border-primary"
+                    }`}
+                  >
+                    {s === "sm" ? "קטן" : s === "md" ? "בינוני" : "גדול"}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-slate-500 mt-2">משפיע על כותרת ה-Hero בלבד</p>
+            </div>
+
+            {/* Section headings size */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-slate-300 mb-3">כותרות קטעים (כל הדף)</label>
+              <div className="flex gap-2">
+                {(["sm", "md", "lg"] as const).map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setDraft((d) => ({ ...d, typography: { ...d.typography, sectionHeadingSize: s } }))}
+                    className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${
+                      (draft.typography?.sectionHeadingSize ?? "md") === s
+                        ? "bg-primary text-white border-primary"
+                        : "bg-transparent text-slate-300 border-slate-600 hover:border-primary"
+                    }`}
+                  >
+                    {s === "sm" ? "קטן" : s === "md" ? "בינוני" : "גדול"}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-slate-500 mt-2">משפיע על כותרות כל הקטעים (שירות, אודות, המלצות וכו׳)</p>
+            </div>
+
             <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}
