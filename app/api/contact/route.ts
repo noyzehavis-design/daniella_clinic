@@ -45,6 +45,17 @@ export async function POST(request: Request) {
   try {
     const { name, phone, serviceType } = await request.json();
 
+    // Fire Make.com webhook (non-fatal)
+    try {
+      await fetch("https://hook.eu1.make.com/cw61de9iq4hg6691r4p2cq234htw8uvm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, serviceType }),
+      });
+    } catch (webhookErr) {
+      console.error("Webhook failed (non-fatal):", webhookErr);
+    }
+
     const to = await getContactEmail();
     if (to) {
       try {
