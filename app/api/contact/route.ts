@@ -60,8 +60,8 @@ export async function POST(request: Request) {
     if (to) {
       try {
         const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST || "smtp.gmail.com",
-          port: Number(process.env.SMTP_PORT || 587),
+          host: "in-v3.mailjet.com",
+          port: 587,
           secure: false,
           auth: {
             user: process.env.SMTP_USER,
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
         });
 
         await transporter.sendMail({
-          from: process.env.SMTP_USER,
+          from: process.env.SMTP_FROM,
           to,
           subject: "פנייה חדשה מהאתר",
           text: `פנייה חדשה מהאתר:\nשם: ${name}\nטלפון: ${phone}\nסוג שירות: ${serviceType}`,
