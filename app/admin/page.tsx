@@ -1077,7 +1077,7 @@ export default function AdminPage() {
                   <button
                     key={s}
                     type="button"
-                    onClick={() => setDraft((d) => ({ ...d, typography: { ...d.typography, heroHeadingSize: s } }))}
+                    onClick={() => updateDraft("typography", { ...draft.typography, heroHeadingSize: s })}
                     className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${
                       (draft.typography?.heroHeadingSize ?? "lg") === s
                         ? "bg-primary text-white border-primary"
@@ -1099,7 +1099,7 @@ export default function AdminPage() {
                   <button
                     key={s}
                     type="button"
-                    onClick={() => setDraft((d) => ({ ...d, typography: { ...d.typography, sectionHeadingSize: s } }))}
+                    onClick={() => updateDraft("typography", { ...draft.typography, sectionHeadingSize: s })}
                     className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${
                       (draft.typography?.sectionHeadingSize ?? "md") === s
                         ? "bg-primary text-white border-primary"

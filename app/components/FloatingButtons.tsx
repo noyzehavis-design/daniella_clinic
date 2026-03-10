@@ -68,41 +68,38 @@ export default function FloatingButtons() {
             </div>
           </motion.div>
 
-          {/* Mobile floating buttons */}
+          {/* Mobile floating buttons — centered, side by side */}
           <motion.div
             key="mobile-floating"
-            className="md:hidden"
+            className="md:hidden flex justify-center"
+            style={{ position: "fixed", bottom: 64, left: 0, right: 0, zIndex: 9999, gap: 12 }}
             {...fadeUp}
             transition={{ duration: 0.3 }}
           >
             {/* WhatsApp */}
-            <div style={{ position: "fixed", bottom: 80, left: 16, zIndex: 9999 }}>
-              <div className="relative">
-                <span className="absolute inset-0 rounded-full animate-ping bg-[#25D366] opacity-40" />
-                <motion.a
-                  href={`https://wa.me/${social.whatsapp}`}
-                  target="_blank" rel="noopener noreferrer"
-                  aria-label="WhatsApp"
-                  className="relative w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl bg-[#25D366]"
-                  style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.25)" }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <FaWhatsapp />
-                </motion.a>
-              </div>
-            </div>
-            {/* Phone */}
-            <div style={{ position: "fixed", bottom: 144, left: 16, zIndex: 9999 }}>
+            <div className="relative">
+              <span className="absolute inset-0 rounded-full animate-ping bg-[#25D366] opacity-40" />
               <motion.a
-                href={`tel:${phoneClean}`}
-                aria-label="חייגי עכשיו"
-                className="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl bg-primary"
+                href={`https://wa.me/${social.whatsapp}`}
+                target="_blank" rel="noopener noreferrer"
+                aria-label="WhatsApp"
+                className="relative w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl bg-[#25D366]"
                 style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.25)" }}
                 whileTap={{ scale: 0.95 }}
               >
-                <FaPhone />
+                <FaWhatsapp />
               </motion.a>
             </div>
+            {/* Phone */}
+            <motion.a
+              href={`tel:${phoneClean}`}
+              aria-label="חייגי עכשיו"
+              className="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl bg-primary"
+              style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.25)" }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FaPhone />
+            </motion.a>
           </motion.div>
 
           {/* Mobile CTA bar */}

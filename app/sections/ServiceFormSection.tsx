@@ -178,7 +178,9 @@ export default function ServiceFormSection() {
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
               className="px-8 py-7"
               style={{
+                scrollMarginTop: "100px",
                 borderRadius: "32px",
+                overflow: "hidden",
                 background: "#ffffff",
                 border: "1px solid rgba(74,191,191,0.35)",
                 boxShadow: "0 20px 60px rgba(74,191,191,0.15), 0 4px 16px rgba(0,0,0,0.06)",

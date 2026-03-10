@@ -82,6 +82,23 @@ body {
   }
 }
 
+/* Footer form autofill text color override */
+.footer-form-input:-webkit-autofill {
+  -webkit-text-fill-color: #0F1923 !important;
+}
+
+/* Testimonials swiper — prevent card clipping on hover + fix dots z-index */
+.testimonials-swiper .swiper-wrapper {
+  overflow: visible;
+}
+.testimonials-swiper .swiper-slide {
+  z-index: 2;
+}
+.testimonials-swiper .swiper-pagination {
+  bottom: 0 !important;
+  z-index: 1;
+}
+
 @media (max-width: 768px) {
   section {
     scroll-margin-top: 60px;

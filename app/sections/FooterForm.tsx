@@ -7,7 +7,7 @@ import { z } from "zod";
 import { useContent } from "@/app/lib/ContentContext";
 
 const inputClass =
-  "w-full px-4 py-3 rounded-xl bg-white/90 text-gray-800 placeholder-gray-400 border border-transparent focus:outline-none focus:ring-2 focus:border-[#4ABFBF] focus:ring-[#4ABFBF]/40 text-base text-right";
+  "w-full px-4 py-3 rounded-xl bg-white text-[#0F1923] placeholder-slate-400 border border-transparent focus:outline-none focus:ring-2 focus:border-[#4ABFBF] focus:ring-[#4ABFBF]/40 text-base text-right";
 
 export default function FooterForm() {
   const { content } = useContent();
@@ -131,7 +131,7 @@ export default function FooterForm() {
               <select
                 {...register("serviceType")}
                 className={inputClass}
-                style={{ appearance: "none", color: "#374151" }}
+                style={{ appearance: "none", color: "#0F1923" }}
               >
                 <option value="">בחרי שירות *</option>
                 {content.forms.serviceOptions.map((opt) => (

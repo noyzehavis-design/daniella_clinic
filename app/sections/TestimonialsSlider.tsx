@@ -42,6 +42,7 @@ export default function TestimonialsSlider() {
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
           style={{
             "--swiper-pagination-color": "#4ABFBF",
+            overflow: "visible",
           } as React.CSSProperties}
         >
           <Swiper
@@ -58,7 +59,7 @@ export default function TestimonialsSlider() {
               640: { slidesPerView: 2 },
               1024: { slidesPerView: 3 },
             }}
-            className="pb-12"
+            className="testimonials-swiper pb-16"
           >
             {items.map((item, i) => (
               <SwiperSlide key={i}>
