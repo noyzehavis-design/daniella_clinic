@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
     // Fire Make.com webhook (non-fatal)
     try {
-      await fetch("https://hook.eu1.make.com/cw61de9iq4hg6691r4p2cq234htw8uvm", {
+      await fetch("https://hook.eu1.make.com/y431d5jh6e0f2zzt9qfl1b7c53jh2t5t", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ "full name": name, "phone number": phone, "service": serviceType }),
