@@ -4,6 +4,7 @@ import CursorDot from "@/app/components/CursorDot";
 import { ContentProvider } from "@/app/lib/ContentContext";
 import PixelScript from "@/app/components/PixelScript";
 import FloatingButtons from "@/app/components/FloatingButtons";
+import CookieBanner from "@/app/components/CookieBanner";
 
 export const metadata: Metadata = {
   title: 'ד"ר דניאלה בלטר-אבן | אורתודונטית מומחית – יישור שיניים שקוף בנהריה',
@@ -47,6 +48,7 @@ export default function RootLayout({
         </ContentProvider>
         <CursorDot />
         <FloatingButtons />
+        <CookieBanner />
       </body>
     </html>
   );

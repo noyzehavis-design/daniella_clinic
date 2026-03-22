@@ -345,6 +345,7 @@ export default function AdminPage() {
     { id: "section-form-footer", label: "טופס תחתית" },
     { id: "section-clinicinfo", label: "פרטי מרפאה" },
     { id: "section-typography", label: "גודל גופן" },
+    { id: "section-privacy", label: "עמוד מדיניות פרטיות" },
   ];
 
   return (
@@ -1113,6 +1114,25 @@ export default function AdminPage() {
               <p className="text-xs text-slate-500 mt-2">משפיע על כותרות כל הקטעים (שירות, אודות, המלצות וכו׳)</p>
             </div>
 
+            <SaveButton onClick={save} disabled={isSaving} />
+          </div>
+        )}
+
+        {/* === PRIVACY POLICY === */}
+        {activeSection === "section-privacy" && (
+          <div className="mb-6 rounded-xl border border-slate-700/60 bg-[#141E28] p-6 shadow-sm">
+            <SectionTitle>עמוד מדיניות פרטיות</SectionTitle>
+            <Field
+              label="כותרת"
+              value={draft.privacyPolicy?.title ?? ""}
+              onChange={(v) => updateDraft("privacyPolicy", { ...draft.privacyPolicy, title: v })}
+            />
+            <Field
+              label="תוכן"
+              value={draft.privacyPolicy?.body ?? ""}
+              onChange={(v) => updateDraft("privacyPolicy", { ...draft.privacyPolicy, body: v })}
+              rows={10}
+            />
             <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}

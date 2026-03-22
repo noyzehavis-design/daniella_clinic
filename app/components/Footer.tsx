@@ -14,7 +14,7 @@ export default function Footer() {
   const services = ["יישור שיניים", "רופאת ילדים", "שיננית", "iTero"];
 
   return (
-    <footer dir="rtl" style={{ backgroundColor: "#0F1923" }} className="text-white">
+    <footer aria-label="כותרת תחתונה" dir="rtl" style={{ backgroundColor: "#0F1923" }} className="text-white">
       {/* ── Main row ── */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
@@ -108,7 +108,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/40">
           <span>{footer.copyright}</span>
           <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-white/70 transition-colors">מדיניות פרטיות</a>
+            <a href="/privacy" className="hover:text-white/70 transition-colors">מדיניות פרטיות</a>
             <span>|</span>
             <a href="#" className="hover:text-white/70 transition-colors">הצהרת נגישות</a>
           </div>

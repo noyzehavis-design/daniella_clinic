@@ -107,6 +107,10 @@ export type SiteContent = {
     heroHeadingSize: "sm" | "md" | "lg";
     sectionHeadingSize: "sm" | "md" | "lg";
   };
+  privacyPolicy: {
+    title: string;
+    body: string;
+  };
 };
 
 export const siteContent: SiteContent = {
@@ -130,7 +134,7 @@ export const siteContent: SiteContent = {
       instagram: "https://www.instagram.com/daniella.balter.even/",
       youtube:
         "https://www.youtube.com/@דרדניאלהבלטראבן-מומחיתלייישורשיני",
-      whatsapp: "97277460800",
+      whatsapp: "972774600800",
     },
   },
 
@@ -333,5 +337,9 @@ export const siteContent: SiteContent = {
   typography: {
     heroHeadingSize: "lg",
     sectionHeadingSize: "md",
+  },
+  privacyPolicy: {
+    title: "מדיניות פרטיות",
+    body: "תוכן מדיניות הפרטיות יופיע כאן. ניתן לערוך דרך לוח הניהול.",
   },
 };
