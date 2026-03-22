@@ -111,6 +111,10 @@ export type SiteContent = {
     title: string;
     body: string;
   };
+  accessibilityStatement: {
+    title: string;
+    body: string;
+  };
 };
 
 export const siteContent: SiteContent = {
@@ -341,5 +345,9 @@ export const siteContent: SiteContent = {
   privacyPolicy: {
     title: "מדיניות פרטיות",
     body: "תוכן מדיניות הפרטיות יופיע כאן. ניתן לערוך דרך לוח הניהול.",
+  },
+  accessibilityStatement: {
+    title: "הצהרת נגישות",
+    body: "תוכן הצהרת הנגישות יופיע כאן. ניתן לערוך דרך לוח הניהול.",
   },
 };

@@ -346,6 +346,7 @@ export default function AdminPage() {
     { id: "section-clinicinfo", label: "פרטי מרפאה" },
     { id: "section-typography", label: "גודל גופן" },
     { id: "section-privacy", label: "עמוד מדיניות פרטיות" },
+    { id: "section-accessibility", label: "עמוד הצהרת נגישות" },
   ];
 
   return (
@@ -1131,6 +1132,25 @@ export default function AdminPage() {
               label="תוכן"
               value={draft.privacyPolicy?.body ?? ""}
               onChange={(v) => updateDraft("privacyPolicy", { ...draft.privacyPolicy, body: v })}
+              rows={10}
+            />
+            <SaveButton onClick={save} disabled={isSaving} />
+          </div>
+        )}
+
+        {/* === ACCESSIBILITY STATEMENT === */}
+        {activeSection === "section-accessibility" && (
+          <div className="mb-6 rounded-xl border border-slate-700/60 bg-[#141E28] p-6 shadow-sm">
+            <SectionTitle>עמוד הצהרת נגישות</SectionTitle>
+            <Field
+              label="כותרת"
+              value={draft.accessibilityStatement?.title ?? ""}
+              onChange={(v) => updateDraft("accessibilityStatement", { ...draft.accessibilityStatement, title: v })}
+            />
+            <Field
+              label="תוכן"
+              value={draft.accessibilityStatement?.body ?? ""}
+              onChange={(v) => updateDraft("accessibilityStatement", { ...draft.accessibilityStatement, body: v })}
               rows={10}
             />
             <SaveButton onClick={save} disabled={isSaving} />

@@ -110,7 +110,7 @@ export default function Footer() {
           <div className="flex items-center gap-4">
             <a href="/privacy" className="hover:text-white/70 transition-colors">מדיניות פרטיות</a>
             <span>|</span>
-            <a href="#" className="hover:text-white/70 transition-colors">הצהרת נגישות</a>
+            <a href="/accessibility" className="hover:text-white/70 transition-colors">הצהרת נגישות</a>
           </div>
         </div>
       </div>
