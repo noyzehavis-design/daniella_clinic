@@ -68,11 +68,11 @@ export default function FloatingButtons() {
             </div>
           </motion.div>
 
-          {/* Mobile floating buttons — centered, side by side */}
+          {/* Mobile floating buttons — bottom-left, stacked */}
           <motion.div
             key="mobile-floating"
-            className="md:hidden flex justify-center"
-            style={{ position: "fixed", bottom: 64, left: 0, right: 0, zIndex: 9999, gap: 12 }}
+            className="md:hidden flex"
+            style={{ position: "fixed", bottom: 70, left: 24, zIndex: 9999, gap: 12, flexDirection: "column" }}
             {...fadeUp}
             transition={{ duration: 0.3 }}
           >
@@ -116,6 +116,7 @@ export default function FloatingButtons() {
                   .getElementById("inline-form")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
+              aria-label="לתיאום ייעוץ חינם - גלול לטופס"
               className="w-full h-full font-bold text-white text-lg"
               style={{ background: "linear-gradient(to left, #4ABFBF, #2D9E9E)" }}
             >
