@@ -3,6 +3,7 @@ import "./globals.css";
 import CursorDot from "@/app/components/CursorDot";
 import { ContentProvider } from "@/app/lib/ContentContext";
 import PixelScript from "@/app/components/PixelScript";
+import FloatingButtons from "@/app/components/FloatingButtons";
 
 export const metadata: Metadata = {
   title: 'ד"ר דניאלה בלטר-אבן | אורתודונטית מומחית – יישור שיניים שקוף בנהריה',
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl">
       <head>
+        <script src="https://cdn.userway.org/widget.js" data-account="TVuo1SzhHJ" data-position="3"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link
@@ -34,11 +36,17 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:right-4 focus:z-[9999] focus:bg-[#4ABFBF] focus:text-white focus:px-4 focus:py-2 focus:rounded">
+          דלג לתוכן הראשי
+        </a>
         <ContentProvider>
           <PixelScript />
-          {children}
+          <main id="main-content">
+            {children}
+          </main>
         </ContentProvider>
         <CursorDot />
+        <FloatingButtons />
       </body>
     </html>
   );

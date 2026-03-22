@@ -6,6 +6,7 @@
 html {
   scroll-behavior: smooth;
   direction: rtl;
+  overflow-x: hidden;
 }
 
 body {
@@ -112,3 +113,23 @@ body {
     border-top: none;
   }
 }
+
+/* ── Accessibility ── */
+*:focus-visible {
+  outline: 3px solid #4ABFBF;
+  outline-offset: 2px;
+}
+
+.high-contrast { filter: contrast(1.5); }
+.highlight-links a { text-decoration: underline !important; outline: 2px solid currentColor; }
+.reduce-motion * { animation: none !important; transition: none !important; }
+.text-lg-a11y { font-size: 110% !important; }
+
+/* UserWay widget — bottom-right, 20px from edges */
+#userwayAccessibilityIcon {
+  bottom: 20px !important;
+  right: 20px !important;
+  top: auto !important;
+  left: auto !important;
+}
+
