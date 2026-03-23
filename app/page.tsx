@@ -13,7 +13,6 @@ import VideosSection from "@/app/sections/VideosSection";
 import FaqSection from "@/app/sections/FaqSection";
 import FooterForm from "@/app/sections/FooterForm";
 import Footer from "@/app/components/Footer";
-import FloatingButtons from "@/app/components/FloatingButtons";
 
 const SectionDivider = () => (
   <div style={{ height: "2px", background: "linear-gradient(to left, transparent, #4ABFBF 50%, transparent)" }} />
@@ -53,7 +52,6 @@ export default function Home() {
         <SectionDivider />
         <Footer />
       </motion.main>
-      <FloatingButtons />
     </>
   );
 }

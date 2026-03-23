@@ -67,6 +67,7 @@ export default function FooterForm() {
 
         {submitted ? (
           <motion.div
+            role="alert"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4 }}
@@ -100,38 +101,47 @@ export default function FooterForm() {
             noValidate
           >
             <div>
+              <label htmlFor="ff-name" className="sr-only">שם מלא</label>
               <input
+                id="ff-name"
                 type="text"
                 {...register("fullName")}
                 placeholder="שם מלא *"
                 className={inputClass}
+                aria-required="true"
               />
               {errors.fullName && (
-                <p className="text-white/80 text-sm text-right mt-1">
+                <p role="alert" className="text-white/80 text-sm text-right mt-1">
                   {errors.fullName.message}
                 </p>
               )}
             </div>
 
             <div>
+              <label htmlFor="ff-phone" className="sr-only">טלפון</label>
               <input
+                id="ff-phone"
                 type="tel"
                 {...register("phone")}
                 placeholder="טלפון *"
                 className={inputClass}
+                aria-required="true"
               />
               {errors.phone && (
-                <p className="text-white/80 text-sm text-right mt-1">
+                <p role="alert" className="text-white/80 text-sm text-right mt-1">
                   {errors.phone.message}
                 </p>
               )}
             </div>
 
             <div>
+              <label htmlFor="ff-service" className="sr-only">שירות</label>
               <select
+                id="ff-service"
                 {...register("serviceType")}
                 className={inputClass}
                 style={{ appearance: "none", color: "#0F1923" }}
+                aria-required="true"
               >
                 <option value="">בחרי שירות *</option>
                 {content.forms.serviceOptions.map((opt) => (
@@ -141,7 +151,7 @@ export default function FooterForm() {
                 ))}
               </select>
               {errors.serviceType && (
-                <p className="text-white/80 text-sm text-right mt-1">
+                <p role="alert" className="text-white/80 text-sm text-right mt-1">
                   {errors.serviceType.message}
                 </p>
               )}
@@ -156,7 +166,7 @@ export default function FooterForm() {
             </button>
 
             {submitError && (
-              <p className="text-white/80 text-sm text-center">
+              <p role="alert" className="text-white/80 text-sm text-center">
                 שגיאה בשליחה, נסי שוב מאוחר יותר
               </p>
             )}

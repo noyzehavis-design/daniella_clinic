@@ -18,7 +18,7 @@ export default function TestimonialsSlider() {
   const { heading, items } = content.testimonials;
 
   return (
-    <section className="relative bg-dark py-16 md:py-24 overflow-hidden">
+    <section aria-label="המלצות" className="relative bg-dark py-16 md:py-24 overflow-hidden">
       <AmbientBackground variant="dark" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4">

@@ -22,7 +22,7 @@ export default function AboutDaniela() {
   const { name, title, bio, image, strengths, ctaText } = content.about;
 
   return (
-    <section className="relative bg-dark py-16 md:py-24 overflow-hidden">
+    <section aria-label="אודות" className="relative bg-dark py-16 md:py-24 overflow-hidden">
       <AmbientBackground variant="dark" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4">

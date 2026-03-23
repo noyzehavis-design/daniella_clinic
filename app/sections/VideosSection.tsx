@@ -19,9 +19,9 @@ export default function VideosSection() {
   const shouldLoad = (i: number) => Math.abs(i - activeIndex) <= 1;
 
   return (
-    <section className="bg-gray py-16 md:py-24 overflow-hidden">
+    <section aria-label="סרטונים" className="bg-gray py-12 md:py-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
-        <SectionHeading eyebrow="הסרטונים שלנו" heading={heading} className="mb-12" />
+        <SectionHeading eyebrow="הסרטונים שלנו" heading={heading} className="mb-8" />
 
         <motion.div
           ref={ref}
@@ -39,19 +39,19 @@ export default function VideosSection() {
             navigation
             pagination={{ clickable: true }}
             spaceBetween={20}
-            centeredSlides
             grabCursor
             onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
             breakpoints={{
-              0: { slidesPerView: 1 },
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
+              0: { slidesPerView: 1.3 },
+              640: { slidesPerView: 2.3 },
+              768: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
             }}
-            className="pb-12"
+            className="pb-16"
           >
             {items.map((item, i) => (
               <SwiperSlide key={i}>
-                <div className="aspect-[9/16] rounded-2xl overflow-hidden shadow-lg bg-dark">
+                <div className="aspect-[9/14] max-h-[400px] rounded-2xl overflow-hidden shadow-lg bg-dark">
                   {shouldLoad(i) ? (
                     <iframe
                       src={`https://www.youtube.com/embed/${item.youtubeId}?rel=0&modestbranding=1`}
@@ -70,7 +70,7 @@ export default function VideosSection() {
                   )}
                 </div>
                 {item.title && (
-                  <p className="text-center text-sm text-textSecondary mt-3 font-medium">
+                  <p className="text-center text-sm text-textSecondary mt-2 font-medium">
                     {item.title}
                   </p>
                 )}

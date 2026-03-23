@@ -10,7 +10,7 @@ export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="bg-dark py-16 md:py-24" dir="rtl">
+    <section aria-label="שאלות נפוצות" className="bg-dark py-16 md:py-24" dir="rtl">
       <div className="max-w-3xl mx-auto px-4">
         <SectionHeading heading={heading} eyebrow="שאלות ותשובות" light />
         <div className="mt-10 flex flex-col gap-3">

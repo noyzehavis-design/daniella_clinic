@@ -18,18 +18,20 @@ const inputClass = (hasError?: boolean) =>
        : "border-[#E2E8F0] focus:border-[#4ABFBF] focus:shadow-[0_0_0_3px_rgba(74,191,191,0.15)]"
    }`;
 
-const ErrorMsg = ({ msg }: { msg?: string }) =>
-  msg ? <p className="text-red-400 text-xs mt-1">{msg}</p> : null;
+const ErrorMsg = ({ msg, id }: { msg?: string; id?: string }) =>
+  msg ? <p id={id} className="text-red-400 text-xs mt-1" role="alert">{msg}</p> : null;
 
 const Field = ({
   label,
+  htmlFor,
   children,
 }: {
   label: string;
+  htmlFor?: string;
   children: React.ReactNode;
 }) => (
   <div className="flex flex-col gap-1">
-    <label className="text-sm font-medium text-[#0F1923]/70">{label}</label>
+    <label htmlFor={htmlFor} className="text-sm font-medium text-[#0F1923]/70">{label}</label>
     {children}
   </div>
 );
@@ -155,7 +157,7 @@ export default function ServiceFormSection() {
 
             {/* Trust badge — Israel Orthodontic Society */}
             <div className="mt-8 inline-flex items-center gap-3 bg-primary rounded-xl px-4 py-3 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white/80 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white/80 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
               </svg>
               <Image
@@ -188,7 +190,7 @@ export default function ServiceFormSection() {
             >
               <div style={{ height: 4, borderRadius: "32px 32px 0 0", background: "linear-gradient(to left, #4ABFBF, #2D9E9E)", margin: "-32px -32px 24px -32px" }} />
               {submitted ? (
-                <div className="flex flex-col items-center justify-center py-8 text-center gap-4">
+                <div role="alert" className="flex flex-col items-center justify-center py-8 text-center gap-4">
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -213,33 +215,42 @@ export default function ServiceFormSection() {
                   >
                     <div className="flex flex-col lg:flex-row lg:items-end lg:gap-5 gap-5">
                       <div className="lg:flex-1">
-                        <Field label={content.forms.fieldName}>
+                        <Field label={content.forms.fieldName} htmlFor="sf-name">
                           <input
+                            id="sf-name"
                             type="text"
                             {...register("fullName")}
                             className={inputClass(!!errors.fullName)}
                             placeholder={content.forms.fieldName}
+                            aria-required="true"
+                            aria-describedby={errors.fullName ? "sf-name-err" : undefined}
                           />
-                          <ErrorMsg msg={errors.fullName?.message} />
+                          <ErrorMsg msg={errors.fullName?.message} id="sf-name-err" />
                         </Field>
                       </div>
                       <div className="lg:flex-1">
-                        <Field label={content.forms.fieldPhone}>
+                        <Field label={content.forms.fieldPhone} htmlFor="sf-phone">
                           <input
+                            id="sf-phone"
                             type="tel"
                             {...register("phone")}
                             className={inputClass(!!errors.phone)}
                             placeholder="05XXXXXXXX"
+                            aria-required="true"
+                            aria-describedby={errors.phone ? "sf-phone-err" : undefined}
                           />
-                          <ErrorMsg msg={errors.phone?.message} />
+                          <ErrorMsg msg={errors.phone?.message} id="sf-phone-err" />
                         </Field>
                       </div>
                       <div className="lg:flex-1">
-                        <Field label={content.forms.fieldService}>
+                        <Field label={content.forms.fieldService} htmlFor="sf-service">
                           <select
+                            id="sf-service"
                             {...register("serviceType")}
                             className={inputClass(!!errors.serviceType)}
                             style={{ appearance: "none" }}
+                            aria-required="true"
+                            aria-describedby={errors.serviceType ? "sf-service-err" : undefined}
                           >
                             <option value="">בחרי שירות</option>
                             {content.forms.serviceOptions.map((opt) => (
@@ -248,7 +259,7 @@ export default function ServiceFormSection() {
                               </option>
                             ))}
                           </select>
-                          <ErrorMsg msg={errors.serviceType?.message} />
+                          <ErrorMsg msg={errors.serviceType?.message} id="sf-service-err" />
                         </Field>
                       </div>
                       <div className="lg:flex-shrink-0 lg:w-44">
@@ -258,7 +269,7 @@ export default function ServiceFormSection() {
                       </div>
                     </div>
                     {submitError && (
-                      <p className="text-red-400 text-sm text-center mt-3">
+                      <p role="alert" className="text-red-400 text-sm text-center mt-3">
                         שגיאה בשליחה, נסי שוב מאוחר יותר
                       </p>
                     )}

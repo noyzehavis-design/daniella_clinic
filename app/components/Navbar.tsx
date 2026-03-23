@@ -68,7 +68,7 @@ export default function Navbar() {
         </a>
 
         {/* Center nav links — desktop only */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav aria-label="ניווט ראשי" className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <a
               key={link.href}
