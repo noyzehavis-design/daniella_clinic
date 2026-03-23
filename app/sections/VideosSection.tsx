@@ -1,11 +1,10 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import SectionHeading from "@/app/components/ui/SectionHeading";
 import { useContent } from "@/app/lib/ContentContext";
 
@@ -13,41 +12,79 @@ export default function VideosSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [activeIndex, setActiveIndex] = useState(0);
+  const [swiperRef, setSwiperRef] = useState<SwiperType | null>(null);
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
   const { content } = useContent();
   const { heading, items } = content.videos;
 
-  const shouldLoad = (i: number) => Math.abs(i - activeIndex) <= 1;
+  const shouldLoad = (i: number) => Math.abs(i - activeIndex) <= 4;
+  const allVisible = isBeginning && isEnd;
+
+  const updateNavState = useCallback((swiper: SwiperType) => {
+    setIsBeginning(swiper.isBeginning);
+    setIsEnd(swiper.isEnd);
+  }, []);
 
   return (
-    <section aria-label="סרטונים" className="bg-gray py-12 md:py-16 overflow-hidden">
+    <section aria-label="סרטונים" className="bg-gray py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4">
         <SectionHeading eyebrow="הסרטונים שלנו" heading={heading} className="mb-8" />
 
         <motion.div
           ref={ref}
+          className="relative"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
           style={{
-            "--swiper-navigation-color": "#4ABFBF",
             "--swiper-pagination-color": "#4ABFBF",
           } as React.CSSProperties}
         >
+          {/* Custom left arrow (next in RTL) — hidden when all slides visible */}
+          {!allVisible && (
+            <button
+              aria-label="הבא"
+              onClick={() => swiperRef?.slideNext()}
+              disabled={isEnd}
+              className="hidden md:flex absolute -left-2 lg:-left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full bg-black/40 backdrop-blur-sm hover:bg-black/60 transition-colors disabled:opacity-30 disabled:cursor-default"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4ABFBF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+          )}
+
+          {/* Custom right arrow (prev in RTL) — hidden when all slides visible */}
+          {!allVisible && (
+            <button
+              aria-label="הקודם"
+              onClick={() => swiperRef?.slidePrev()}
+              disabled={isBeginning}
+              className="hidden md:flex absolute -right-2 lg:-right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full bg-black/40 backdrop-blur-sm hover:bg-black/60 transition-colors disabled:opacity-30 disabled:cursor-default"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4ABFBF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          )}
+
           <Swiper
             dir="rtl"
-            modules={[Navigation, Pagination]}
-            navigation
-            pagination={{ clickable: true }}
-            spaceBetween={20}
+            modules={[Navigation]}
+            spaceBetween={16}
             grabCursor
-            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-            breakpoints={{
-              0: { slidesPerView: 1.3 },
-              640: { slidesPerView: 2.3 },
-              768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
+            onSwiper={(swiper) => {
+              setSwiperRef(swiper);
+              updateNavState(swiper);
             }}
-            className="pb-16"
+            onSlideChange={(swiper) => {
+              setActiveIndex(swiper.realIndex);
+              updateNavState(swiper);
+            }}
+            onResize={updateNavState}
+            breakpoints={{
+              0: { slidesPerView: 1.3, spaceBetween: 12 },
+              640: { slidesPerView: 2, spaceBetween: 16 },
+              768: { slidesPerView: 3, spaceBetween: 16 },
+              1024: { slidesPerView: 4, spaceBetween: 16 },
+            }}
           >
             {items.map((item, i) => (
               <SwiperSlide key={i}>
