@@ -78,6 +78,7 @@ export type SiteContent = {
     };
   };
   videos: {
+    eyebrow: string;
     heading: string;
     items: { youtubeId: string; title: string }[];
   };
@@ -300,6 +301,7 @@ export const siteContent: SiteContent = {
   },
 
   videos: {
+    eyebrow: "הסרטונים שלנו",
     heading: "צפי בסרטונים שלנו",
     items: [
       { youtubeId: "PLACEHOLDER_1", title: "סרטון 1" },

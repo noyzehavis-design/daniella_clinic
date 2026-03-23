@@ -16,7 +16,7 @@ export default function VideosSection() {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const { content } = useContent();
-  const { heading, items } = content.videos;
+  const { eyebrow, heading, items } = content.videos;
 
   const shouldLoad = (i: number) => Math.abs(i - activeIndex) <= 4;
   const allVisible = isBeginning && isEnd;
@@ -29,7 +29,7 @@ export default function VideosSection() {
   return (
     <section aria-label="סרטונים" className="bg-gray py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4">
-        <SectionHeading eyebrow="הסרטונים שלנו" heading={heading} className="mb-8" />
+        <SectionHeading eyebrow={eyebrow} heading={heading} className="mb-8" />
 
         <motion.div
           ref={ref}

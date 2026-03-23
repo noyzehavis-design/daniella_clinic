@@ -859,6 +859,8 @@ export default function AdminPage() {
         {activeSection === "section-videos" && (
           <div className="mb-6 rounded-xl border border-slate-700/60 bg-[#141E28] p-6 shadow-sm">
             <SectionTitle>סרטונים</SectionTitle>
+            <Field label="כותרת עליונה (eyebrow)" value={draft.videos.eyebrow} onChange={v => updateDraft("videos", { ...draft.videos, eyebrow: v })} />
+            <Field label="כותרת ראשית" value={draft.videos.heading} onChange={v => updateDraft("videos", { ...draft.videos, heading: v })} />
             <ArrayEditor
               items={draft.videos.items}
               renderItem={(item, i) => (
