@@ -35,6 +35,9 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap"
           rel="stylesheet"
         />
+        <noscript>
+          <img height="1" width="1" style={{ display: "none" }} src="https://www.facebook.com/tr?id=1643957256644269&ev=PageView&noscript=1" alt="" />
+        </noscript>
       </head>
       <body className="antialiased">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:right-4 focus:z-[9999] focus:bg-[#4ABFBF] focus:text-white focus:px-4 focus:py-2 focus:rounded">
