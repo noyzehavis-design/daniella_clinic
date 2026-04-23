@@ -88,16 +88,19 @@ export default function VideosSection() {
           >
             {items.map((item, i) => (
               <SwiperSlide key={i}>
-                <div className="aspect-[9/14] max-h-[400px] rounded-2xl overflow-hidden shadow-lg bg-dark">
+                <div className="aspect-[9/14] max-h-[400px] rounded-2xl overflow-hidden shadow-lg bg-dark relative">
                   {shouldLoad(i) ? (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${item.youtubeId}?rel=0&modestbranding=1`}
-                      title={item.title}
-                      className="w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      loading="lazy"
-                    />
+                    <>
+                      <iframe
+                        src={`https://www.youtube.com/embed/${item.youtubeId}?rel=0&modestbranding=1`}
+                        title={item.title}
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 md:hidden" />
+                    </>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
