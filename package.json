@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:delivery": "node scripts/delivery-logic.test.mjs"
+    "test:delivery": "node scripts/delivery-logic.test.mjs",
+    "test:pixel": "node scripts/pixel-extract.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
