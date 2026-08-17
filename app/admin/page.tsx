@@ -1064,6 +1064,22 @@ export default function AdminPage() {
                 onChange={(e) => setDraft((d) => ({ ...d, meta: { ...d.meta, facebookPixelCode: e.target.value } }))}
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">
+                מזהה Google Analytics 4
+              </label>
+              <input
+                type="text"
+                dir="ltr"
+                className="w-full border border-slate-600 rounded-lg px-3 py-2 text-sm font-mono bg-[#0F1923] text-slate-200"
+                placeholder="G-XXXXXXXXXX"
+                value={draft.meta?.ga4MeasurementId ?? ""}
+                onChange={(e) => setDraft((d) => ({ ...d, meta: { ...d.meta, ga4MeasurementId: e.target.value } }))}
+              />
+              <p className="text-xs text-slate-400 mt-1">
+                נמצא ב-Google Analytics ← Admin ← Data Streams. כל עוד השדה ריק, המדידה כבויה ולא נטען שום קוד מעקב.
+              </p>
+            </div>
             <SaveButton onClick={save} disabled={isSaving} />
           </div>
         )}

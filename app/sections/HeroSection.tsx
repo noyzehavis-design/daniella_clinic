@@ -154,6 +154,7 @@ export default function HeroSection() {
           </GlowButton>
           <a
             href={`tel:${phoneClean}`}
+            data-track-location="hero"
             className="flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white
                        border-2 border-white/40 rounded-[50px] hover:border-primary hover:text-primary
                        transition-all duration-300"

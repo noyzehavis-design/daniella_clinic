@@ -43,17 +43,49 @@ async function getContactEmail(): Promise<string> {
 
 export async function POST(request: Request) {
   try {
-    const { name, phone, serviceType } = await request.json();
+    const {
+      name,
+      phone,
+      serviceType,
+      lead_source = "",
+      utm_source = "",
+      utm_medium = "",
+      utm_campaign = "",
+      utm_term = "",
+      utm_content = "",
+      gclid = "",
+    } = await request.json();
 
-    // Fire Make.com webhook (non-fatal)
+    // A lead only counts as received if it reached at least one channel.
+    // Both failing must surface as an error so the visitor retries and no
+    // conversion is reported for a lead that vanished.
+    let webhookOk = false;
+    let emailOk = false;
+
     try {
-      await fetch("https://hook.eu1.make.com/urnbkljyfuirbfi6x0cdirvjfehcfe6g", {
+      const webhookRes = await fetch("https://hook.eu1.make.com/urnbkljyfuirbfi6x0cdirvjfehcfe6g", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ "full name": name, "phone number": phone, "service": serviceType, "date": new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" }) }),
+        body: JSON.stringify({
+          // Existing keys — the live Make scenario maps these, do not rename.
+          "full name": name,
+          "phone number": phone,
+          "service": serviceType,
+          "date": new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" }),
+          // Attribution
+          lead_source,
+          utm_source,
+          utm_medium,
+          utm_campaign,
+          utm_term,
+          utm_content,
+          gclid,
+        }),
       });
+      webhookOk = webhookRes.ok;
+      if (!webhookOk) console.error("Webhook rejected the lead, status:", webhookRes.status);
     } catch (webhookErr) {
-      console.error("Webhook failed (non-fatal):", webhookErr);
+      console.error("Webhook request failed:", webhookErr);
     }
 
     const to = await getContactEmail();
@@ -73,17 +105,25 @@ export async function POST(request: Request) {
           from: process.env.SMTP_FROM,
           to,
           subject: "פנייה חדשה מהאתר",
-          text: `פנייה חדשה מהאתר:\nשם: ${name}\nטלפון: ${phone}\nסוג שירות: ${serviceType}`,
+          text: `פנייה חדשה מהאתר:\nשם: ${name}\nטלפון: ${phone}\nסוג שירות: ${serviceType}\nמקור הליד: ${lead_source}`,
           html: `<div dir="rtl" style="font-family:Arial,sans-serif;font-size:15px">
             <h2 style="color:#4ABFBF">פנייה חדשה מהאתר</h2>
             <p><strong>שם:</strong> ${name}</p>
             <p><strong>טלפון:</strong> ${phone}</p>
             <p><strong>סוג שירות:</strong> ${serviceType}</p>
+            <p><strong>מקור הליד:</strong> ${lead_source}</p>
           </div>`,
         });
+        emailOk = true;
       } catch (emailErr) {
-        console.error("Email send failed (non-fatal):", emailErr);
+        console.error("Email send failed:", emailErr);
       }
+    }
+
+    if (!webhookOk && !emailOk) {
+      // Deliberately vague to the client — no lead details leave the server.
+      console.error("Lead delivery failed on every channel.");
+      return NextResponse.json({ ok: false, error: "delivery_failed" }, { status: 502 });
     }
 
     return NextResponse.json({ ok: true });

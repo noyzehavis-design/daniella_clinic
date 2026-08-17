@@ -4,6 +4,7 @@ import CursorDot from "@/app/components/CursorDot";
 import { ContentProvider } from "@/app/lib/ContentContext";
 import { getSiteContent } from "@/app/lib/serverContent";
 import PixelScript from "@/app/components/PixelScript";
+import Analytics from "@/app/components/Analytics";
 import FloatingButtons from "@/app/components/FloatingButtons";
 import CookieBanner from "@/app/components/CookieBanner";
 
@@ -47,6 +48,7 @@ export default async function RootLayout({
         </a>
         <ContentProvider initialContent={initialContent}>
           <PixelScript />
+          <Analytics />
           <main id="main-content">
             {children}
           </main>
