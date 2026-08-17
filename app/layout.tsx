@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import CursorDot from "@/app/components/CursorDot";
 import { ContentProvider } from "@/app/lib/ContentContext";
+import { getSiteContent } from "@/app/lib/serverContent";
 import PixelScript from "@/app/components/PixelScript";
 import FloatingButtons from "@/app/components/FloatingButtons";
 import CookieBanner from "@/app/components/CookieBanner";
@@ -22,9 +23,10 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const initialContent = await getSiteContent();
   return (
     <html lang="he" dir="rtl">
       <head>
@@ -43,7 +45,7 @@ export default function RootLayout({
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:right-4 focus:z-[9999] focus:bg-[#4ABFBF] focus:text-white focus:px-4 focus:py-2 focus:rounded">
           דלג לתוכן הראשי
         </a>
-        <ContentProvider>
+        <ContentProvider initialContent={initialContent}>
           <PixelScript />
           <main id="main-content">
             {children}

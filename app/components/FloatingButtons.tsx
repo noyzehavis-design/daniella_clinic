@@ -16,10 +16,13 @@ export default function FloatingButtons() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const fadeUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 20 },
+  // Opacity-only (no translateY): a transform on a position:fixed element
+  // causes iOS Safari to glitch/clip it during scroll. Fade avoids that
+  // while still giving the buttons a soft entrance.
+  const fadeIn = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
   };
 
   return (
@@ -30,7 +33,7 @@ export default function FloatingButtons() {
           <motion.div
             key="desktop-buttons"
             className="fixed bottom-6 left-6 z-50 hidden md:flex flex-col gap-3"
-            {...fadeUp}
+            {...fadeIn}
             transition={{ duration: 0.3 }}
           >
             {/* WhatsApp with ping ring */}
@@ -73,7 +76,7 @@ export default function FloatingButtons() {
             key="mobile-floating"
             className="md:hidden flex"
             style={{ position: "fixed", bottom: 70, left: 24, zIndex: 9999, gap: 12, flexDirection: "column" }}
-            {...fadeUp}
+            {...fadeIn}
             transition={{ duration: 0.3 }}
           >
             {/* WhatsApp */}
@@ -107,7 +110,7 @@ export default function FloatingButtons() {
             key="mobile-cta"
             className="md:hidden fixed bottom-0 left-0 right-0"
             style={{ height: 52, paddingBottom: "env(safe-area-inset-bottom)", zIndex: 9998 }}
-            {...fadeUp}
+            {...fadeIn}
             transition={{ duration: 0.3 }}
           >
             <button

@@ -8,20 +8,21 @@ export const ContentContext = createContext<Ctx>({
   setContent: async () => {},
 });
 
-export function ContentProvider({ children }: { children: ReactNode }) {
-  const [content, setContentState] = useState<SiteContent>(defaultContent);
+export function ContentProvider({
+  children,
+  initialContent,
+}: {
+  children: ReactNode;
+  initialContent?: SiteContent;
+}) {
+  // initialContent comes from the server (already the real, saved content),
+  // so the first paint is correct — no more flash of the placeholder
+  // defaults before the client fetch below resolves.
+  const [content, setContentState] = useState<SiteContent>(initialContent ?? defaultContent);
 
   useEffect(() => {
-    // Try localStorage first for instant load, then sync from KV
-    try {
-      const cached = localStorage.getItem("siteContent");
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        // Merge with defaults so missing keys don't crash
-        setContentState({ ...defaultContent, ...parsed });
-      }
-    } catch {}
-
+    // Refresh from the API in case content changed in another tab/session
+    // since this page was rendered.
     fetch("/api/content")
       .then((r) => r.json())
       .then((data) => {
