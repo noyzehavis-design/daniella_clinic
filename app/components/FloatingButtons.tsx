@@ -116,11 +116,11 @@ export default function FloatingButtons() {
                   .getElementById("inline-form")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
-              aria-label="לתיאום ייעוץ חינם - גלול לטופס"
+              aria-label="לתיאום שיחת ייעוץ - גלול לטופס"
               className="w-full h-full font-bold text-white text-lg"
               style={{ background: "linear-gradient(to left, #4ABFBF, #2D9E9E)" }}
             >
-              לתיאום ייעוץ חינם
+              לתיאום שיחת ייעוץ
             </button>
           </motion.div>
         </>

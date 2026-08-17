@@ -139,7 +139,7 @@ export const siteContent: SiteContent = {
       instagram: "https://www.instagram.com/daniella.balter.even/",
       youtube:
         "https://www.youtube.com/@דרדניאלהבלטראבן-מומחיתלייישורשיני",
-      whatsapp: "972774600800",
+      whatsapp: "972587404142",
     },
   },
 
