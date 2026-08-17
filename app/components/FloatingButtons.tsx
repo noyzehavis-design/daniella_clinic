@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaWhatsapp, FaPhone } from "react-icons/fa";
 import { useContent } from "@/app/lib/ContentContext";
-import { getLeadSource, trackEvent } from "@/app/lib/tracking";
+import { trackEvent } from "@/app/lib/tracking";
 
 const MOBILE_CTA_TEXT = "לתיאום שיחת ייעוץ";
 
@@ -135,7 +135,6 @@ export default function FloatingButtons() {
             trackEvent("cta_click", {
               link_location: "mobile-cta-bar",
               link_text: MOBILE_CTA_TEXT,
-              lead_source: getLeadSource(),
             });
             document
               .getElementById("inline-form")

@@ -1,13 +1,9 @@
 "use client";
 import { useEffect } from "react";
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 import { useContent } from "@/app/lib/ContentContext";
-import {
-  captureCampaignParams,
-  getLeadSource,
-  isValidMeasurementId,
-  trackEvent,
-} from "@/app/lib/tracking";
+import { captureCampaignParams, isValidMeasurementId, trackEvent } from "@/app/lib/tracking";
 
 const WHATSAPP_HOSTS = ["wa.me", "api.whatsapp.com", "whatsapp.com"];
 
@@ -44,18 +40,27 @@ function classifyLink(href: string): "phone_click" | "whatsapp_click" | null {
 
 export default function Analytics() {
   const { content } = useContent();
+  const pathname = usePathname();
   const measurementId = content.meta?.ga4MeasurementId?.trim();
-  const enabled = isValidMeasurementId(measurementId);
+
+  // The admin panel is staff-only. Measuring it would pollute the campaign
+  // data with the site owner's own page views and contact clicks, so nothing
+  // here runs on /admin: no GA4 script, no page_view, no click listeners.
+  const isAdminArea = pathname === "/admin" || !!pathname?.startsWith("/admin/");
+  const enabled = isValidMeasurementId(measurementId) && !isAdminArea;
 
   // Attribution capture runs regardless of GA4 — the lead payload sent to
   // Make depends on it, and that works with or without analytics configured.
   useEffect(() => {
+    if (isAdminArea) return;
     captureCampaignParams();
-  }, []);
+  }, [isAdminArea]);
 
   // One delegated listener covers every phone/WhatsApp link on the site,
   // including any added later, and fires exactly once per click.
   useEffect(() => {
+    if (isAdminArea) return;
+
     const onClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
       const anchor = target?.closest?.("a");
@@ -70,13 +75,12 @@ export default function Analytics() {
       trackEvent(eventName, {
         link_location: resolveLocation(anchor),
         link_text: resolveLinkText(anchor),
-        lead_source: getLeadSource(),
       });
     };
 
     document.addEventListener("click", onClick);
     return () => document.removeEventListener("click", onClick);
-  }, []);
+  }, [isAdminArea]);
 
   if (!enabled) return null;
 
