@@ -3,10 +3,17 @@
 @tailwind utilities;
 
 /* ── RTL base & smooth scroll ── */
+/* overflow-x:hidden turns the page into a scroll container, which makes
+   mobile browsers position `fixed` elements against it instead of the
+   visual viewport — that's what left the bottom CTA bar clipped halfway
+   off-screen while scrolling. `clip` blocks sideways scrolling exactly the
+   same way but never creates a scroll container. `hidden` is kept first as
+   a fallback for browsers too old to know `clip`. */
 html {
   scroll-behavior: smooth;
   direction: rtl;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -14,6 +21,7 @@ body {
   color: #1E293B;
   background: #FFFFFF;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ── Design Tokens ── */
