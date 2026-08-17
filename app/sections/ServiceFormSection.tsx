@@ -8,6 +8,7 @@ import { z } from "zod";
 import { FaCheck } from "react-icons/fa";
 import GlowButton from "@/app/components/ui/GlowButton";
 import { useContent } from "@/app/lib/ContentContext";
+import { getLeadAttribution, trackEvent } from "@/app/lib/tracking";
 
 const inputClass = (hasError?: boolean) =>
   `w-full border-[1.5px] rounded-xl px-4 py-[14px] outline-none transition-all duration-200
@@ -70,6 +71,7 @@ export default function ServiceFormSection() {
 
   const onSubmit = async (data: FormData) => {
     setSubmitError(false);
+    const attribution = getLeadAttribution();
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -78,10 +80,18 @@ export default function ServiceFormSection() {
           name: data.fullName,
           phone: data.phone,
           serviceType: data.serviceType,
+          ...attribution,
         }),
       });
       if (!res.ok) throw new Error();
       setSubmitted(true);
+      // Only after the server confirmed the lead reached a real channel.
+      // No name/phone here — GA4 must never receive personal details.
+      trackEvent("generate_lead", {
+        form_name: "service_inline",
+        form_location: "inline-form",
+        lead_source: attribution.lead_source,
+      });
     } catch {
       setSubmitError(true);
     }

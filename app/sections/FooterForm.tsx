@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useContent } from "@/app/lib/ContentContext";
+import { getLeadAttribution, trackEvent } from "@/app/lib/tracking";
 
 const inputClass =
   "w-full px-4 py-3 rounded-xl bg-white text-[#0F1923] placeholder-slate-400 border border-transparent focus:outline-none focus:ring-2 focus:border-[#4ABFBF] focus:ring-[#4ABFBF]/40 text-base text-right";
@@ -34,14 +35,27 @@ export default function FooterForm() {
 
   const onSubmit = async (data: FormData) => {
     setSubmitError(false);
+    const attribution = getLeadAttribution();
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: data.fullName, phone: data.phone, serviceType: data.serviceType }),
+        body: JSON.stringify({
+          name: data.fullName,
+          phone: data.phone,
+          serviceType: data.serviceType,
+          ...attribution,
+        }),
       });
       if (!res.ok) throw new Error();
       setSubmitted(true);
+      // Only after the server confirmed the lead reached a real channel.
+      // No name/phone here — GA4 must never receive personal details.
+      trackEvent("generate_lead", {
+        form_name: "footer",
+        form_location: "footer",
+        lead_source: attribution.lead_source,
+      });
     } catch {
       setSubmitError(true);
     }

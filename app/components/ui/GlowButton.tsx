@@ -9,6 +9,8 @@ interface GlowButtonProps {
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   type?: "button" | "submit" | "reset";
+  /** Labels this button for analytics; see Analytics.tsx resolveLocation. */
+  "data-track-location"?: string;
 }
 
 export default function GlowButton({
@@ -19,6 +21,7 @@ export default function GlowButton({
   size = "md",
   fullWidth = false,
   type = "submit",
+  ...rest
 }: GlowButtonProps) {
   const padding =
     size === "sm"
@@ -41,13 +44,13 @@ export default function GlowButton({
 
   if (href)
     return (
-      <motion.a href={href} className={cls} {...motionProps}>
+      <motion.a href={href} className={cls} {...motionProps} {...rest}>
         {children}
       </motion.a>
     );
 
   return (
-    <motion.button onClick={onClick} type={type} className={cls} {...motionProps}>
+    <motion.button onClick={onClick} type={type} className={cls} {...motionProps} {...rest}>
       {children}
     </motion.button>
   );

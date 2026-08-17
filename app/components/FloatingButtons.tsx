@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaWhatsapp, FaPhone } from "react-icons/fa";
 import { useContent } from "@/app/lib/ContentContext";
+import { trackEvent } from "@/app/lib/tracking";
+
+const MOBILE_CTA_TEXT = "לתיאום שיחת ייעוץ";
 
 export default function FloatingButtons() {
   const { content } = useContent();
@@ -36,6 +39,7 @@ export default function FloatingButtons() {
       <div
         className="fixed bottom-6 left-6 z-50 hidden md:flex flex-col gap-3"
         style={reveal}
+        data-track-location="floating-desktop"
       >
         {/* WhatsApp with ping ring */}
         <div className="relative">
@@ -75,6 +79,7 @@ export default function FloatingButtons() {
       {/* Mobile floating buttons — bottom-left, stacked */}
       <div
         className="md:hidden flex"
+        data-track-location="floating-mobile"
         style={{
           ...reveal,
           position: "fixed",
@@ -125,16 +130,21 @@ export default function FloatingButtons() {
         }}
       >
         <button
-          onClick={() =>
+          onClick={() => {
+            // Intent signal only — the lead itself is counted on form success.
+            trackEvent("cta_click", {
+              link_location: "mobile-cta-bar",
+              link_text: MOBILE_CTA_TEXT,
+            });
             document
               .getElementById("inline-form")
-              ?.scrollIntoView({ behavior: "smooth" })
-          }
+              ?.scrollIntoView({ behavior: "smooth" });
+          }}
           aria-label="לתיאום שיחת ייעוץ - גלול לטופס"
           className="w-full font-bold text-white text-lg"
           style={{ height: 52 }}
         >
-          לתיאום שיחת ייעוץ
+          {MOBILE_CTA_TEXT}
         </button>
       </div>
     </>

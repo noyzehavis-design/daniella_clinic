@@ -38,6 +38,7 @@ export default function Footer() {
           <div className="flex flex-col gap-1.5 text-sm text-center">
             <a
               href={`tel:${clinic.phone.replace(/-/g, "")}`}
+              data-track-location="footer"
               dir="ltr"
               className="text-white/80 hover:text-[#4ABFBF] transition-colors font-medium"
             >
@@ -92,6 +93,7 @@ export default function Footer() {
             </a>
             <a
               href={`https://wa.me/${clinic.social.whatsapp}`}
+              data-track-location="footer"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"

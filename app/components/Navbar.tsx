@@ -91,7 +91,7 @@ export default function Navbar() {
 
         {/* Phone button — left side in RTL */}
         <div className="hidden md:flex items-center">
-          <GlowButton href={`tel:${phone.replace(/-/g, "")}`} size="sm">
+          <GlowButton href={`tel:${phone.replace(/-/g, "")}`} size="sm" data-track-location="navbar">
             <span className="flex items-center gap-2" dir="ltr">
               <FaPhone className="text-xs" />
               <span>{phone}</span>
@@ -127,7 +127,7 @@ export default function Navbar() {
                 </a>
               ))}
               <div className="pt-3 flex justify-center">
-                <GlowButton href={`tel:${phone.replace(/-/g, "")}`} size="sm">
+                <GlowButton href={`tel:${phone.replace(/-/g, "")}`} size="sm" data-track-location="navbar">
                   <span className="flex items-center gap-2" dir="ltr">
                     <FaPhone className="text-xs" />
                     <span>{phone}</span>
