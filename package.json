@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test:delivery": "node scripts/delivery-logic.test.mjs",
-    "test:pixel": "node scripts/pixel-extract.test.mjs"
+    "test:pixel": "node scripts/pixel-extract.test.mjs",
+    "test:host": "node scripts/measurable-host.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

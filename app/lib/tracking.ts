@@ -91,10 +91,29 @@ export function getLeadAttribution() {
 }
 
 type GtagFn = (...args: unknown[]) => void;
+type FbqFn = (...args: unknown[]) => void;
 declare global {
   interface Window {
     gtag?: GtagFn;
+    fbq?: FbqFn;
   }
+}
+
+/**
+ * Analytics must only run on the real site. Loading it on localhost or on a
+ * Vercel preview sends test traffic — including test conversions — into the
+ * same GA4 property and Meta pixel as production, which is exactly how a
+ * conversion count drifts above the number of leads actually received.
+ *
+ * Takes the hostname so it can be unit tested.
+ */
+export function isMeasurableHost(hostname: string): boolean {
+  const host = hostname.trim().toLowerCase();
+  if (!host) return false;
+  if (host === "localhost" || host.endsWith(".localhost")) return false;
+  if (host === "127.0.0.1" || host === "::1" || host === "0.0.0.0") return false;
+  if (host.endsWith(".vercel.app")) return false;
+  return true;
 }
 
 /** A GA4 Measurement ID looks like G-XXXXXXXXXX. Anything else stays dormant. */
@@ -116,4 +135,34 @@ export function trackEvent(name: string, params: Record<string, string> = {}): v
   } catch {
     // Analytics must never break the page.
   }
+}
+
+/**
+ * Meta's equivalent of trackEvent. Same rules: no personal data, and a silent
+ * no-op when the pixel has not loaded.
+ */
+export function trackMetaEvent(name: string, params: Record<string, string> = {}): void {
+  if (typeof window === "undefined" || typeof window.fbq !== "function") return;
+  try {
+    window.fbq("track", name, params);
+  } catch {
+    // Analytics must never break the page.
+  }
+}
+
+/**
+ * The single place a won lead is reported to both platforms. Call it only
+ * after the server has confirmed the lead was actually received — never on
+ * button click, validation failure, a network error, or a failure response.
+ */
+export function trackLeadConversion(details: {
+  form_name: string;
+  form_location: string;
+  lead_source: string;
+}): void {
+  trackEvent("generate_lead", details);
+  trackMetaEvent("Lead", {
+    content_name: details.form_name,
+    lead_source: details.lead_source,
+  });
 }

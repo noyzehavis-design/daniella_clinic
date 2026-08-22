@@ -9,6 +9,7 @@ interface GlowButtonProps {
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
   /** Labels this button for analytics; see Analytics.tsx resolveLocation. */
   "data-track-location"?: string;
 }
@@ -21,6 +22,7 @@ export default function GlowButton({
   size = "md",
   fullWidth = false,
   type = "submit",
+  disabled = false,
   ...rest
 }: GlowButtonProps) {
   const padding =
@@ -36,11 +38,13 @@ export default function GlowButton({
     fullWidth ? "w-full text-center" : ""
   } ${className}`;
 
-  const motionProps = {
-    whileHover: { scale: 1.05, boxShadow: "0 8px 40px rgba(74,191,191,0.6)" },
-    whileTap: { scale: 0.97 },
-    transition: { duration: 0.2 },
-  };
+  const motionProps = disabled
+    ? { transition: { duration: 0.2 } }
+    : {
+        whileHover: { scale: 1.05, boxShadow: "0 8px 40px rgba(74,191,191,0.6)" },
+        whileTap: { scale: 0.97 },
+        transition: { duration: 0.2 },
+      };
 
   if (href)
     return (
@@ -50,7 +54,14 @@ export default function GlowButton({
     );
 
   return (
-    <motion.button onClick={onClick} type={type} className={cls} {...motionProps} {...rest}>
+    <motion.button
+      onClick={onClick}
+      type={type}
+      disabled={disabled}
+      className={`${cls} disabled:opacity-70 disabled:cursor-not-allowed`}
+      {...motionProps}
+      {...rest}
+    >
       {children}
     </motion.button>
   );

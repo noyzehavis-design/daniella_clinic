@@ -1,9 +1,14 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useContent } from "@/app/lib/ContentContext";
-import { captureCampaignParams, isValidMeasurementId, trackEvent } from "@/app/lib/tracking";
+import {
+  captureCampaignParams,
+  isMeasurableHost,
+  isValidMeasurementId,
+  trackEvent,
+} from "@/app/lib/tracking";
 
 const WHATSAPP_HOSTS = ["wa.me", "api.whatsapp.com", "whatsapp.com"];
 
@@ -43,11 +48,19 @@ export default function Analytics() {
   const pathname = usePathname();
   const measurementId = content.meta?.ga4MeasurementId?.trim();
 
+  // The hostname is only known in the browser, so the decision is made after
+  // mount; rendering the tag on the server and then dropping it would be a
+  // hydration mismatch.
+  const [onMeasurableHost, setOnMeasurableHost] = useState(false);
+  useEffect(() => {
+    setOnMeasurableHost(isMeasurableHost(window.location.hostname));
+  }, []);
+
   // The admin panel is staff-only. Measuring it would pollute the campaign
   // data with the site owner's own page views and contact clicks, so nothing
   // here runs on /admin: no GA4 script, no page_view, no click listeners.
   const isAdminArea = pathname === "/admin" || !!pathname?.startsWith("/admin/");
-  const enabled = isValidMeasurementId(measurementId) && !isAdminArea;
+  const enabled = isValidMeasurementId(measurementId) && !isAdminArea && onMeasurableHost;
 
   // Attribution capture runs regardless of GA4 — the lead payload sent to
   // Make depends on it, and that works with or without analytics configured.

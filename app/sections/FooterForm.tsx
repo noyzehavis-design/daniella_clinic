@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useContent } from "@/app/lib/ContentContext";
-import { getLeadAttribution, trackEvent } from "@/app/lib/tracking";
+import { getLeadAttribution, trackLeadConversion } from "@/app/lib/tracking";
 
 const inputClass =
   "w-full px-4 py-3 rounded-xl bg-white text-[#0F1923] placeholder-slate-400 border border-transparent focus:outline-none focus:ring-2 focus:border-[#4ABFBF] focus:ring-[#4ABFBF]/40 text-base text-right";
@@ -33,7 +33,16 @@ export default function FooterForm() {
     formState: { errors, isSubmitting },
   } = useForm<FormData>({ resolver: zodResolver(formSchema) });
 
+  // Guards the conversion against ever being reported twice for one lead.
+  const conversionReported = useRef(false);
+  // Blocks re-entry synchronously. `disabled` alone is not enough: several
+  // clicks can land in the same tick, before React has re-rendered the
+  // button, which would post the same lead to Make more than once.
+  const submitInFlight = useRef(false);
+
   const onSubmit = async (data: FormData) => {
+    if (submitInFlight.current) return;
+    submitInFlight.current = true;
     setSubmitError(false);
     const attribution = getLeadAttribution();
     try {
@@ -49,15 +58,21 @@ export default function FooterForm() {
       });
       if (!res.ok) throw new Error();
       setSubmitted(true);
-      // Only after the server confirmed the lead reached a real channel.
-      // No name/phone here — GA4 must never receive personal details.
-      trackEvent("generate_lead", {
-        form_name: "footer",
-        form_location: "footer",
-        lead_source: attribution.lead_source,
-      });
+      // Reported only once the server confirmed the lead was received — never
+      // on click, validation failure, a network error or a failure response.
+      // No name/phone here: neither platform may receive personal details.
+      if (!conversionReported.current) {
+        conversionReported.current = true;
+        trackLeadConversion({
+          form_name: "footer",
+          form_location: "footer",
+          lead_source: attribution.lead_source,
+        });
+      }
     } catch {
       setSubmitError(true);
+    } finally {
+      submitInFlight.current = false;
     }
   };
 

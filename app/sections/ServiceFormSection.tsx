@@ -8,7 +8,7 @@ import { z } from "zod";
 import { FaCheck } from "react-icons/fa";
 import GlowButton from "@/app/components/ui/GlowButton";
 import { useContent } from "@/app/lib/ContentContext";
-import { getLeadAttribution, trackEvent } from "@/app/lib/tracking";
+import { getLeadAttribution, trackLeadConversion } from "@/app/lib/tracking";
 
 const inputClass = (hasError?: boolean) =>
   `w-full border-[1.5px] rounded-xl px-4 py-[14px] outline-none transition-all duration-200
@@ -69,7 +69,16 @@ export default function ServiceFormSection() {
     formState: { errors, isSubmitting },
   } = useForm<FormData>({ resolver: zodResolver(formSchema) });
 
+  // Guards the conversion against ever being reported twice for one lead.
+  const conversionReported = useRef(false);
+  // Blocks re-entry synchronously. `disabled` alone is not enough: several
+  // clicks can land in the same tick, before React has re-rendered the
+  // button, which would post the same lead to Make more than once.
+  const submitInFlight = useRef(false);
+
   const onSubmit = async (data: FormData) => {
+    if (submitInFlight.current) return;
+    submitInFlight.current = true;
     setSubmitError(false);
     const attribution = getLeadAttribution();
     try {
@@ -85,15 +94,21 @@ export default function ServiceFormSection() {
       });
       if (!res.ok) throw new Error();
       setSubmitted(true);
-      // Only after the server confirmed the lead reached a real channel.
-      // No name/phone here — GA4 must never receive personal details.
-      trackEvent("generate_lead", {
-        form_name: "service_inline",
-        form_location: "inline-form",
-        lead_source: attribution.lead_source,
-      });
+      // Reported only once the server confirmed the lead was received — never
+      // on click, validation failure, a network error or a failure response.
+      // No name/phone here: neither platform may receive personal details.
+      if (!conversionReported.current) {
+        conversionReported.current = true;
+        trackLeadConversion({
+          form_name: "service_inline",
+          form_location: "inline-form",
+          lead_source: attribution.lead_source,
+        });
+      }
     } catch {
       setSubmitError(true);
+    } finally {
+      submitInFlight.current = false;
     }
   };
 
@@ -273,7 +288,7 @@ export default function ServiceFormSection() {
                         </Field>
                       </div>
                       <div className="lg:flex-shrink-0 lg:w-44">
-                        <GlowButton fullWidth size="lg">
+                        <GlowButton fullWidth size="lg" disabled={isSubmitting}>
                           {isSubmitting ? "שולח..." : content.forms.submitText}
                         </GlowButton>
                       </div>
