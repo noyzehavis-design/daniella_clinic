@@ -38,9 +38,12 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap"
           rel="stylesheet"
         />
-        <noscript>
-          <img height="1" width="1" style={{ display: "none" }} src="https://www.facebook.com/tr?id=1643957256644269&ev=PageView&noscript=1" alt="" />
-        </noscript>
+        {/* No <noscript> pixel image here on purpose. Next.js emits a
+            <link rel="preload" as="image"> for it, and the browser then
+            actually fetches the tracking URL on every page load — even with
+            JavaScript enabled — which Meta counts as a second PageView on
+            top of the one fbq sends. The JS pixel covers every real
+            visitor. */}
       </head>
       <body className="antialiased">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:right-4 focus:z-[9999] focus:bg-[#4ABFBF] focus:text-white focus:px-4 focus:py-2 focus:rounded">
