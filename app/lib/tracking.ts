@@ -122,6 +122,36 @@ export function isValidMeasurementId(id?: string | null): boolean {
 }
 
 /**
+ * Sends once, as soon as the tag is available. A visitor can submit before a
+ * slow analytics script has finished loading; without this the event was
+ * dropped silently and permanently, which is one way a conversion goes
+ * missing. Gives up after the timeout so nothing lingers.
+ */
+function deliverWhenReady(isReady: () => boolean, send: () => void, timeoutMs = 8000): void {
+  if (typeof window === "undefined") return;
+  const attempt = () => {
+    try {
+      send();
+    } catch {
+      // Analytics must never break the page.
+    }
+  };
+  if (isReady()) {
+    attempt();
+    return;
+  }
+  const startedAt = Date.now();
+  const timer = window.setInterval(() => {
+    if (isReady()) {
+      window.clearInterval(timer);
+      attempt();
+    } else if (Date.now() - startedAt >= timeoutMs) {
+      window.clearInterval(timer);
+    }
+  }, 200);
+}
+
+/**
  * Single funnel for every analytics event. Uses gtag only — never a parallel
  * dataLayer.push — so an event can't be counted twice.
  *
@@ -129,12 +159,10 @@ export function isValidMeasurementId(id?: string | null): boolean {
  * receive personally identifying information.
  */
 export function trackEvent(name: string, params: Record<string, string> = {}): void {
-  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
-  try {
-    window.gtag("event", name, params);
-  } catch {
-    // Analytics must never break the page.
-  }
+  deliverWhenReady(
+    () => typeof window.gtag === "function",
+    () => window.gtag!("event", name, params)
+  );
 }
 
 /**
@@ -142,12 +170,10 @@ export function trackEvent(name: string, params: Record<string, string> = {}): v
  * no-op when the pixel has not loaded.
  */
 export function trackMetaEvent(name: string, params: Record<string, string> = {}): void {
-  if (typeof window === "undefined" || typeof window.fbq !== "function") return;
-  try {
-    window.fbq("track", name, params);
-  } catch {
-    // Analytics must never break the page.
-  }
+  deliverWhenReady(
+    () => typeof window.fbq === "function",
+    () => window.fbq!("track", name, params)
+  );
 }
 
 /**
