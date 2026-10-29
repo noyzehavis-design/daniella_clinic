@@ -7,10 +7,8 @@ import { useContent } from "@/app/lib/ContentContext";
 /**
  * Where both lead forms land once the server has confirmed the lead.
  *
- * Meta blocks the standard Lead event for this pixel (health data policy),
- * so the conversion is measured as a custom conversion on this URL instead.
- * The pixel and GA4 both record the client-side navigation here as a page
- * view on their own, so nothing is fired from this page.
+ * The lead is already reported before the redirect (see trackLeadConversion),
+ * so nothing is fired from this page.
  */
 export default function ThankYouPage() {
   const { content } = useContent();
