@@ -176,7 +176,23 @@ export function trackMetaEvent(name: string, params: Record<string, string> = {}
   );
 }
 
-/** Where a confirmed lead is sent; Meta measures it as a URL-based custom conversion. */
+/**
+ * A custom (non-standard) event for the same moment. Meta blocks the standard
+ * Lead event for this pixel and trims every URL it receives down to the bare
+ * domain, so neither Lead nor a URL rule on the thank-you page can count site
+ * leads. A custom event with no parameters is the remaining signal a custom
+ * conversion can be built on.
+ */
+export const META_FORM_SUBMIT_EVENT = "SiteFormSubmit";
+
+function trackMetaCustomEvent(name: string): void {
+  deliverWhenReady(
+    () => typeof window.fbq === "function",
+    () => window.fbq!("trackCustom", name)
+  );
+}
+
+/** Where a confirmed lead is sent after it has been reported. */
 export const THANK_YOU_PATH = "/thank-you";
 
 /**
@@ -194,4 +210,5 @@ export function trackLeadConversion(details: {
     content_name: details.form_name,
     lead_source: details.lead_source,
   });
+  trackMetaCustomEvent(META_FORM_SUBMIT_EVENT);
 }
