@@ -176,6 +176,9 @@ export function trackMetaEvent(name: string, params: Record<string, string> = {}
   );
 }
 
+/** Where a confirmed lead is sent; Meta measures it as a URL-based custom conversion. */
+export const THANK_YOU_PATH = "/thank-you";
+
 /**
  * The single place a won lead is reported to both platforms. Call it only
  * after the server has confirmed the lead was actually received — never on

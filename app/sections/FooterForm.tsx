@@ -1,17 +1,19 @@
 "use client";
 import { useState, useRef, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useContent } from "@/app/lib/ContentContext";
-import { getLeadAttribution, trackLeadConversion } from "@/app/lib/tracking";
+import { getLeadAttribution, trackLeadConversion, THANK_YOU_PATH } from "@/app/lib/tracking";
 
 const inputClass =
   "w-full px-4 py-3 rounded-xl bg-white text-[#0F1923] placeholder-slate-400 border border-transparent focus:outline-none focus:ring-2 focus:border-[#4ABFBF] focus:ring-[#4ABFBF]/40 text-base text-right";
 
 export default function FooterForm() {
   const { content } = useContent();
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const ref = useRef(null);
@@ -69,6 +71,9 @@ export default function FooterForm() {
           lead_source: attribution.lead_source,
         });
       }
+      // A client-side push keeps any still-pending conversion delivery alive
+      // and lets the pixel record the visit to the thank-you page.
+      router.push(THANK_YOU_PATH);
     } catch {
       setSubmitError(true);
     } finally {
