@@ -2,13 +2,14 @@
 import { useRef, useState, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FaCheck } from "react-icons/fa";
 import GlowButton from "@/app/components/ui/GlowButton";
 import { useContent } from "@/app/lib/ContentContext";
-import { getLeadAttribution, trackLeadConversion } from "@/app/lib/tracking";
+import { getLeadAttribution, trackLeadConversion, THANK_YOU_PATH } from "@/app/lib/tracking";
 
 const inputClass = (hasError?: boolean) =>
   `w-full border-[1.5px] rounded-xl px-4 py-[14px] outline-none transition-all duration-200
@@ -48,6 +49,7 @@ const bulletVariants = {
 
 export default function ServiceFormSection() {
   const { content } = useContent();
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const ref = useRef(null);
@@ -105,6 +107,9 @@ export default function ServiceFormSection() {
           lead_source: attribution.lead_source,
         });
       }
+      // A client-side push keeps any still-pending conversion delivery alive
+      // and lets the pixel record the visit to the thank-you page.
+      router.push(THANK_YOU_PATH);
     } catch {
       setSubmitError(true);
     } finally {
